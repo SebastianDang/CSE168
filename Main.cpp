@@ -33,6 +33,8 @@ void project1() {
 
 	MeshObject box2;
 	box2.MakeBox(1.0f,1.0f,1.0f);
+    
+    /*
 
 	InstanceObject inst1(box2);
 	glm::mat4x4 mtx=glm::rotate(glm::mat4x4(),0.5f,glm::vec3(1,0,0));
@@ -69,6 +71,8 @@ void project1() {
 	// Render image
 	cam.Render(scn);
 	cam.SaveBitmap("project1.bmp");
+    
+    */
 }
 
 ////////////////////////////////////////////////////////////////////////////////
