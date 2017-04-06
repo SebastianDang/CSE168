@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		18BDF7B71E9602C80016ABCB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18BDF7B61E9602C80016ABCB /* main.cpp */; };
+		18BDF7CD1E9602F00016ABCB /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18BDF7BD1E9602F00016ABCB /* Bitmap.cpp */; };
+		18BDF7CE1E9602F00016ABCB /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18BDF7BF1E9602F00016ABCB /* Color.cpp */; };
+		18BDF7CF1E9602F00016ABCB /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18BDF7C41E9602F00016ABCB /* Main.cpp */; };
+		18BDF7D01E9602F00016ABCB /* MeshObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18BDF7C61E9602F00016ABCB /* MeshObject.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +27,22 @@
 
 /* Begin PBXFileReference section */
 		18BDF7B31E9602C80016ABCB /* PA1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PA1; sourceTree = BUILT_PRODUCTS_DIR; };
-		18BDF7B61E9602C80016ABCB /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		18BDF7BD1E9602F00016ABCB /* Bitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bitmap.cpp; sourceTree = "<group>"; };
+		18BDF7BE1E9602F00016ABCB /* Bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bitmap.h; sourceTree = "<group>"; };
+		18BDF7BF1E9602F00016ABCB /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Color.cpp; sourceTree = "<group>"; };
+		18BDF7C01E9602F00016ABCB /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
+		18BDF7C11E9602F00016ABCB /* Intersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Intersection.h; sourceTree = "<group>"; };
+		18BDF7C21E9602F00016ABCB /* LambertMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LambertMaterial.h; sourceTree = "<group>"; };
+		18BDF7C31E9602F00016ABCB /* Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
+		18BDF7C41E9602F00016ABCB /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Main.cpp; sourceTree = "<group>"; };
+		18BDF7C51E9602F00016ABCB /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
+		18BDF7C61E9602F00016ABCB /* MeshObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshObject.cpp; sourceTree = "<group>"; };
+		18BDF7C71E9602F00016ABCB /* MeshObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshObject.h; sourceTree = "<group>"; };
+		18BDF7C81E9602F00016ABCB /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
+		18BDF7C91E9602F00016ABCB /* Ray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ray.h; sourceTree = "<group>"; };
+		18BDF7CA1E9602F00016ABCB /* Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
+		18BDF7CB1E9602F00016ABCB /* Triangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Triangle.h; sourceTree = "<group>"; };
+		18BDF7CC1E9602F00016ABCB /* Vertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vertex.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,7 +59,22 @@
 		18BDF7AA1E9602C80016ABCB = {
 			isa = PBXGroup;
 			children = (
-				18BDF7B51E9602C80016ABCB /* PA1 */,
+				18BDF7BD1E9602F00016ABCB /* Bitmap.cpp */,
+				18BDF7BE1E9602F00016ABCB /* Bitmap.h */,
+				18BDF7BF1E9602F00016ABCB /* Color.cpp */,
+				18BDF7C01E9602F00016ABCB /* Color.h */,
+				18BDF7C11E9602F00016ABCB /* Intersection.h */,
+				18BDF7C21E9602F00016ABCB /* LambertMaterial.h */,
+				18BDF7C31E9602F00016ABCB /* Light.h */,
+				18BDF7C41E9602F00016ABCB /* Main.cpp */,
+				18BDF7C51E9602F00016ABCB /* Material.h */,
+				18BDF7C61E9602F00016ABCB /* MeshObject.cpp */,
+				18BDF7C71E9602F00016ABCB /* MeshObject.h */,
+				18BDF7C81E9602F00016ABCB /* Object.h */,
+				18BDF7C91E9602F00016ABCB /* Ray.h */,
+				18BDF7CA1E9602F00016ABCB /* Scene.h */,
+				18BDF7CB1E9602F00016ABCB /* Triangle.h */,
+				18BDF7CC1E9602F00016ABCB /* Vertex.h */,
 				18BDF7B41E9602C80016ABCB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -52,14 +85,6 @@
 				18BDF7B31E9602C80016ABCB /* PA1 */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		18BDF7B51E9602C80016ABCB /* PA1 */ = {
-			isa = PBXGroup;
-			children = (
-				18BDF7B61E9602C80016ABCB /* main.cpp */,
-			);
-			path = PA1;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,7 +144,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18BDF7B71E9602C80016ABCB /* main.cpp in Sources */,
+				18BDF7D01E9602F00016ABCB /* MeshObject.cpp in Sources */,
+				18BDF7CD1E9602F00016ABCB /* Bitmap.cpp in Sources */,
+				18BDF7CE1E9602F00016ABCB /* Color.cpp in Sources */,
+				18BDF7CF1E9602F00016ABCB /* Main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +244,8 @@
 		18BDF7BB1E9602C80016ABCB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = /Developer;
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -223,6 +253,8 @@
 		18BDF7BC1E9602C80016ABCB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = /Developer;
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
