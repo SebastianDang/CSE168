@@ -18,7 +18,7 @@ public:
 	void AddLight(Light &lgt)					{Lights.push_back(&lgt);}
 	void SetSkyColor(const Color sky)			{SkyColor=sky;}
 
-	int GetNumLights()							{return Lights.size();}
+	int GetNumLights()							{return (int)Lights.size();}
 	Light &GetLight(int i)						{return *Lights[i];}
 	Color GetSkyColor()							{return SkyColor;}
 

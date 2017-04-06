@@ -7,3 +7,7 @@
 //
 
 #include "DirectLight.h"
+
+DirectLight::DirectLight(){
+    Direction = glm::vec3(0.0f, 0.0f, 0.0f);
+}

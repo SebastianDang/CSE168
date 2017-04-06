@@ -98,16 +98,16 @@
 				18BDF7DD1E960A680016ABCB /* Triangle.cpp */,
 				18BDF7CB1E9602F00016ABCB /* Triangle.h */,
 				18BDF7CC1E9602F00016ABCB /* Vertex.h */,
-				18BDF7B41E9602C80016ABCB /* Products */,
+				18BDF7B41E9602C80016ABCB /* Z_Products */,
 			);
 			sourceTree = "<group>";
 		};
-		18BDF7B41E9602C80016ABCB /* Products */ = {
+		18BDF7B41E9602C80016ABCB /* Z_Products */ = {
 			isa = PBXGroup;
 			children = (
 				18BDF7B31E9602C80016ABCB /* PA1 */,
 			);
-			name = Products;
+			name = Z_Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -153,7 +153,7 @@
 				en,
 			);
 			mainGroup = 18BDF7AA1E9602C80016ABCB;
-			productRefGroup = 18BDF7B41E9602C80016ABCB /* Products */;
+			productRefGroup = 18BDF7B41E9602C80016ABCB /* Z_Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -272,6 +272,7 @@
 		18BDF7BB1E9602C80016ABCB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				HEADER_SEARCH_PATHS = /Developer;
 				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -281,6 +282,7 @@
 		18BDF7BC1E9602C80016ABCB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				HEADER_SEARCH_PATHS = /Developer;
 				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";

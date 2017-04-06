@@ -9,7 +9,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-class MeshObject:public Object {
+class MeshObject: public Object {
 public:
 	MeshObject();
 	~MeshObject();
