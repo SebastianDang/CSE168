@@ -45,8 +45,6 @@ void MeshObject::MakeBox(float x,float y,float z,Material *mtl) {
 	x*=0.5f;
 	y*=0.5f;
 	z*=0.5f;
-    
-    
 
 	// Corners
 	glm::vec3 p000(-x,-y,-z);
@@ -116,7 +114,6 @@ void MeshObject::MakeBox(float x,float y,float z,Material *mtl) {
 	Vertexes[23].Set(p110,-zAxis,t01);
 	Triangles[10].Init(&Vertexes[20],&Vertexes[21],&Vertexes[22],mtl);
 	Triangles[11].Init(&Vertexes[20],&Vertexes[22],&Vertexes[23],mtl);
-    
 }
 
 ////////////////////////////////////////////////////////////////////////////////
