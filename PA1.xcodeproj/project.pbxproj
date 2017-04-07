@@ -73,31 +73,31 @@
 		18BDF7AA1E9602C80016ABCB = {
 			isa = PBXGroup;
 			children = (
-				18BDF7BD1E9602F00016ABCB /* Bitmap.cpp */,
-				18BDF7BE1E9602F00016ABCB /* Bitmap.h */,
-				18BDF7D41E96093B0016ABCB /* Camera.cpp */,
-				18BDF7D51E96093B0016ABCB /* Camera.h */,
-				18BDF7BF1E9602F00016ABCB /* Color.cpp */,
-				18BDF7C01E9602F00016ABCB /* Color.h */,
-				18BDF7DA1E96099B0016ABCB /* DirectLight.cpp */,
-				18BDF7DB1E96099B0016ABCB /* DirectLight.h */,
-				18BDF7D11E9608C40016ABCB /* InstanceObject.cpp */,
-				18BDF7D21E9608C40016ABCB /* InstanceObject.h */,
-				18BDF7C11E9602F00016ABCB /* Intersection.h */,
-				18BDF7C21E9602F00016ABCB /* LambertMaterial.h */,
-				18BDF7C31E9602F00016ABCB /* Light.h */,
-				18BDF7C41E9602F00016ABCB /* Main.cpp */,
-				18BDF7C51E9602F00016ABCB /* Material.h */,
-				18BDF7C61E9602F00016ABCB /* MeshObject.cpp */,
-				18BDF7C71E9602F00016ABCB /* MeshObject.h */,
-				18BDF7C81E9602F00016ABCB /* Object.h */,
-				18BDF7D71E96097A0016ABCB /* PointLight.cpp */,
-				18BDF7D81E96097A0016ABCB /* PointLight.h */,
 				18BDF7C91E9602F00016ABCB /* Ray.h */,
-				18BDF7CA1E9602F00016ABCB /* Scene.h */,
-				18BDF7DD1E960A680016ABCB /* Triangle.cpp */,
-				18BDF7CB1E9602F00016ABCB /* Triangle.h */,
+				18BDF7C11E9602F00016ABCB /* Intersection.h */,
 				18BDF7CC1E9602F00016ABCB /* Vertex.h */,
+				18BDF7CB1E9602F00016ABCB /* Triangle.h */,
+				18BDF7DD1E960A680016ABCB /* Triangle.cpp */,
+				18BDF7CA1E9602F00016ABCB /* Scene.h */,
+				18BDF7D51E96093B0016ABCB /* Camera.h */,
+				18BDF7D41E96093B0016ABCB /* Camera.cpp */,
+				18BDF7BE1E9602F00016ABCB /* Bitmap.h */,
+				18BDF7BD1E9602F00016ABCB /* Bitmap.cpp */,
+				18BDF7C01E9602F00016ABCB /* Color.h */,
+				18BDF7BF1E9602F00016ABCB /* Color.cpp */,
+				18BDF7C31E9602F00016ABCB /* Light.h */,
+				18BDF7DB1E96099B0016ABCB /* DirectLight.h */,
+				18BDF7DA1E96099B0016ABCB /* DirectLight.cpp */,
+				18BDF7D81E96097A0016ABCB /* PointLight.h */,
+				18BDF7D71E96097A0016ABCB /* PointLight.cpp */,
+				18BDF7C81E9602F00016ABCB /* Object.h */,
+				18BDF7C71E9602F00016ABCB /* MeshObject.h */,
+				18BDF7C61E9602F00016ABCB /* MeshObject.cpp */,
+				18BDF7D21E9608C40016ABCB /* InstanceObject.h */,
+				18BDF7D11E9608C40016ABCB /* InstanceObject.cpp */,
+				18BDF7C51E9602F00016ABCB /* Material.h */,
+				18BDF7C21E9602F00016ABCB /* LambertMaterial.h */,
+				18BDF7C41E9602F00016ABCB /* Main.cpp */,
 				18BDF7B41E9602C80016ABCB /* Z_Products */,
 			);
 			sourceTree = "<group>";
@@ -308,6 +308,7 @@
 				18BDF7BC1E9602C80016ABCB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

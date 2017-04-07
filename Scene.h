@@ -11,7 +11,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 class Scene {
+
 public:
+    
 	Scene()										{SkyColor.Set(0.2f,0.2f,0.5f);}
 
 	void AddObject(Object &obj)					{Objects.push_back(&obj);}
@@ -22,6 +24,7 @@ public:
 	Light &GetLight(int i)						{return *Lights[i];}
 	Color GetSkyColor()							{return SkyColor;}
 
+    //Checks the intersection for all the objects in the scene.
 	bool Intersect(const Ray &ray,Intersection &hit) {
 		bool success=false;
 		for(unsigned int i=0;i<Objects.size();i++)
@@ -30,6 +33,7 @@ public:
 	}
 
 private:
+    
 	std::vector<Object*> Objects;
 	std::vector<Light*> Lights;
 	Color SkyColor;

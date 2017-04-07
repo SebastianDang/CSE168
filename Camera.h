@@ -20,24 +20,31 @@ class Camera {
 public:
     Camera();
     
-    void SetFOV(float f) { VerticalFOV = f; }
+    void SetFOV(float f) { VerticalFOV = M_PI * f / 180; }
     
     void SetAspect(float a) { Aspect = a; }
     
-    void SetResolution(int x,int y) { XRes = x; YRes = y; }
+    void SetResolution(int x,int y) { XRes = x; YRes = y; BMP.Resize(x,y); }
     
-    void LookAt(glm::vec3 &pos,glm::vec3 &target,glm::vec3 &up);
+    void LookAt(const glm::vec3 &pos, const glm::vec3 &target, const glm::vec3 &up);
     
     void Render(Scene &s);
     
     void SaveBitmap(char *filename);
     
 private:
-    int XRes, YRes;
-    glm::mat4x4 WorldMatrix;
+    
+    //Camera properties.
     float VerticalFOV;
     float Aspect;
+    int XRes, YRes;
+    
+    //Output Bitmap.
     Bitmap BMP;
+    
+    //Camera's Matrix in world space.
+    glm::mat4x4 WorldMatrix;
+    
 };
 
 #endif /* Camera_h */

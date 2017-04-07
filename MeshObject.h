@@ -10,18 +10,23 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 class MeshObject: public Object {
+
 public:
-	MeshObject();
+	
+    MeshObject();
 	~MeshObject();
 
 	bool Intersect(const Ray &ray,Intersection &hit);
 
 	void MakeBox(float x,float y,float z,Material *mtl=0);
+    
+    bool Load(const char *filename);
 
 private:
-	int NumVertexes,NumTriangles;
+	int NumVertexes, NumTriangles, NumMaterials;
 	Vertex *Vertexes;
 	Triangle *Triangles;
+    Material *Materials;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
