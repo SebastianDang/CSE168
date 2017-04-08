@@ -46,16 +46,19 @@ bool Triangle::Intersect(const Ray &ray, Intersection &hit) const{
     hit.Position = p + (t * d);
     hit.HitDistance = glm::distance(ray.Origin, hit.Position); //Correct for any scaling.
     
-    //Smooth shade the triangle (normal).
-    //glm::vec3 triangle_normal = glm::normalize(glm::cross(b-a, c-a));
+    //hit.Normal = glm::normalize(glm::cross(b-a, c-a));//Triangle normal.
     
+    //Smooth shade the triangle (normal).
     glm::vec3 na = Vtx[0]->Normal;
     glm::vec3 nb = Vtx[1]->Normal;
     glm::vec3 nc = Vtx[2]->Normal;
     
     hit.Normal = ((1-alpha-beta) * na) + (alpha * nb) + (beta * nc);
     
-    //TODO: Check if the back or front is hit.
+    //TODO: Check if the back or front is hit. Normal needs to point towards ray origin.
+    if (glm::dot(hit.Normal, ray.Direction) > 0.0f){
+        hit.Normal = -1.0f * hit.Normal;//flip.
+    }
     
     return true;
 }

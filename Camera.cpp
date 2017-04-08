@@ -68,30 +68,37 @@ void Camera::Render(Scene &s){
             
             //Check if the camera ray intersects with any objects in the scene.
             Intersection hit;
-            hit.HitDistance = 1000;
+            hit.HitDistance = 1000.0f;
             
             //Scene.Intersect( ... )
             if (s.Intersect(camera_ray, hit)){
                 
                 //Result pixel color.
-                Color resultPixel = Color();
+                Color resultColor = Color(0.0f, 0.0f, 0.0f);
                 
-                //Compute with lighting.
-                
-                
-                
-                
-                
-                
+                //Compute lighting.
+                for (int i = 0; i < s.GetNumLights(); i++) {
+                    
+                    //Light variables.
+                    glm::vec3 pos = hit.Position;
+                    Color col;
+                    glm::vec3 toLight;
+                    glm::vec3 ltPos;
+                    
+                    //Calculate light.
+                    float illuminate = s.GetLight(i).Illuminate(pos, col, toLight, ltPos);
+                    float factor = glm::dot(toLight, hit.Normal);
+
+                    col.Scale(factor * illuminate);
+                    resultColor.Add(col);
+                }
                 
                 //We set the pixel accordingly.
-                BMP.SetPixel(x, y, resultPixel.ToInt());
+                BMP.SetPixel(x, y, resultColor.ToInt());
             }
             else{
                 BMP.SetPixel(x, y, s.GetSkyColor().ToInt());
             }
-            
-            
             
         }
     }
