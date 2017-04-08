@@ -71,12 +71,27 @@ void Camera::Render(Scene &s){
             hit.HitDistance = 1000;
             
             //Scene.Intersect( ... )
-//            if (s.Intersect(camera_ray, hit){
-//                
-//            }
+            if (s.Intersect(camera_ray, hit)){
+                
+                //Result pixel color.
+                Color resultPixel = Color();
+                
+                //Compute with lighting.
+                
+                
+                
+                
+                
+                
+                
+                //We set the pixel accordingly.
+                BMP.SetPixel(x, y, resultPixel.ToInt());
+            }
+            else{
+                BMP.SetPixel(x, y, s.GetSkyColor().ToInt());
+            }
             
-            //If true, we set the pixel accordingly.
-            BMP.SetPixel(x, y, (float)x + y);//TEST
+            
             
         }
     }
