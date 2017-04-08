@@ -81,15 +81,15 @@ void Camera::Render(Scene &s){
                     
                     //Light variables.
                     glm::vec3 pos = hit.Position;
-                    Color col;
-                    glm::vec3 toLight;
-                    glm::vec3 ltPos;
+                    Color col;//Returned color set in illuminate.
+                    glm::vec3 toLight;//Shadows
+                    glm::vec3 ltPos;//Shadows
                     
-                    //Calculate light.
-                    float illuminate = s.GetLight(i).Illuminate(pos, col, toLight, ltPos);
-                    float factor = glm::dot(toLight, hit.Normal);
+                    //Calculate light intensity.
+                    float intensity = s.GetLight(i).Illuminate(pos, col, toLight, ltPos);
+                    float shadow = glm::dot(toLight, hit.Normal);
 
-                    col.Scale(factor * illuminate);
+                    col.Scale(shadow * intensity);
                     resultColor.Add(col);
                 }
                 
