@@ -68,7 +68,6 @@ void Camera::Render(Scene &s){
             
             //Check if the camera ray intersects with any objects in the scene.
             Intersection hit;
-            hit.HitDistance = 1000.0f;
             
             //Scene.Intersect( ... )
             if (s.Intersect(camera_ray, hit)){

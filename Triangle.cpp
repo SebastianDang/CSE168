@@ -43,14 +43,15 @@ bool Triangle::Intersect(const Ray &ray, Intersection &hit) const{
     if ((alpha + beta) >= 1) return false;//Verify a+b<1
     
     //Compute hit intersection values.
-    hit.Position = p + (t * d);
-    hit.HitDistance = glm::distance(ray.Origin, hit.Position); //Correct for any scaling.
+    hit.Position = p + (t * d);//Ray equation.
+    hit.HitDistance = glm::distance(ray.Origin, hit.Position);//Correct for any scaling.
     
-    //Smooth shade the triangle (normal).
+    //Normals
     glm::vec3 na = Vtx[0]->Normal;
     glm::vec3 nb = Vtx[1]->Normal;
     glm::vec3 nc = Vtx[2]->Normal;
     
+    //Smooth shade the triangle (normal).
     hit.Normal = ((1-alpha-beta) * na) + (alpha * nb) + (beta * nc);
     
     //Check if the back or front is hit. Normal needs to point towards ray origin.
