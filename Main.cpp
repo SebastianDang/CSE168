@@ -84,7 +84,8 @@ void test(){
     scn.SetSkyColor(Color(0.8, 0.9, 1.0));
     
     // Create box
-    MeshObject box; box.MakeBox(1.0, 1.0, 1.0);
+    MeshObject box;
+    box.MakeBox(0.5, 0.2, 0.3);
     scn.AddObject(box);
     
     // Create light
@@ -96,7 +97,7 @@ void test(){
     
     // Create camera
     Camera cam;
-    cam.LookAt(glm::vec3(0.0f,3.0f,4.0f),glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,1.0f,0.0f));
+    cam.LookAt(glm::vec3(0.0f,0.0f,5.0f),glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,1.0f,0.0f));
     cam.SetFOV(50.0); // NOTE: this is in degrees for UI purposes. Internally, it should be stored as radians
     cam.SetAspect(1.33);
     cam.SetResolution(800,600);

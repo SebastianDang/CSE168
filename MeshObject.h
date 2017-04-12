@@ -19,9 +19,10 @@ public:
 	void MakeBox(float x,float y,float z,Material *mtl=0);
 
 private:
-	int NumVertexes,NumTriangles;
+	int NumVertexes,NumTriangles,NumMaterials;
 	Vertex *Vertexes;
 	Triangle *Triangles;
+    Material *Materials;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

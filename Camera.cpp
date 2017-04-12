@@ -86,7 +86,7 @@ void Camera::Render(Scene &s){
                     
                     //Calculate light intensity.
                     float intensity = s.GetLight(i).Illuminate(pos, col, toLight, ltPos);
-                    float shadow = glm::dot(toLight, hit.Normal);
+                    float shadow = glm::dot(toLight, hit.Normal);//Will set to 0 if dot == 0.
 
                     col.Scale(shadow * intensity);
                     resultColor.Add(col);

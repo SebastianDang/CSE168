@@ -20,7 +20,7 @@ class Camera {
 public:
     Camera();
     
-    void SetFOV(float f) { VerticalFOV = M_PI * f / 180; }
+    void SetFOV(float f) { VerticalFOV = M_PI * f / 180.0f; }
     
     void SetAspect(float a) { Aspect = a; }
     
