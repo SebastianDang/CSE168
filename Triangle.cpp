@@ -31,16 +31,16 @@ bool Triangle::Intersect(const Ray &ray, Intersection &hit) const{
     
     //t = (p-a) dot [(b-a) x (c-a)] / det(M)
     float t = glm::dot(p-a, glm::cross(b-a, c-a)) / detM;
-    if (t <= 0 || t>= hit.HitDistance) return false;//Verify t>0 and t<HitDistance (already hit).
+    if (t < 0 || t>= hit.HitDistance) return false;//Verify t>0 and t<HitDistance (already hit).
     
     //alpha = -d dot [(p-a) x (c-a)] / det(M)
     float alpha = glm::dot(-d, glm::cross(p-a, c-a)) / detM;
-    if (alpha <= 0) return false;//Verify alpha>0
+    if (alpha < 0) return false;//Verify alpha>0
     
     //beta = -d dot [(b-a) x (p-a)] / det(M)
     float beta = glm::dot(-d, glm::cross(b-a, p-a)) / detM;
-    if (beta <= 0) return false;//Verify beta>0
-    if ((alpha + beta) >= 1) return false;//Verify a+b<1
+    if (beta < 0) return false;//Verify beta>0
+    if ((alpha + beta) > 1) return false;//Verify a+b<1
     
     //Compute hit intersection values.
     hit.Position = p + (t * d);//Ray equation.
@@ -58,6 +58,8 @@ bool Triangle::Intersect(const Ray &ray, Intersection &hit) const{
     if (glm::dot(hit.Normal, ray.Direction) > 0.0f){
         hit.Normal = -1.0f * hit.Normal;//flip.
     }
+    
+    //Triangle Texture Coordinates. TODO: Slide 2, p62.
     
     return true;
 }

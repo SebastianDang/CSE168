@@ -13,7 +13,7 @@ InstanceObject::InstanceObject(){
     //Set defaults just in case.
     Matrix = glm::mat4x4(1.0f);
     Inverse = glm::inverse(Matrix);
-    
+    //Set Child.
     Child = NULL;
 }
 
@@ -22,7 +22,7 @@ InstanceObject::InstanceObject(Object &obj){
     //Set defaults just in case.
     Matrix = glm::mat4x4(1.0f);
     Inverse = glm::inverse(Matrix);
-    
+    //Set Child.
     SetChild(obj);
 }
 
@@ -35,10 +35,12 @@ bool InstanceObject::Intersect(const Ray &ray,Intersection &hit){
     
     //Create ray2 from ray.
     Ray ray2;
+    
+    //Use the inverse to transform the ray into object space.
     ray2.Origin = glm::vec3(Inverse * glm::vec4(ray.Origin, 1.0f));
     ray2.Direction = glm::vec3(Inverse * glm::vec4(ray.Direction, 0.0f));
     
-    //Check if the child object intersects.
+    //Check if the child object intersects. (Object Space).
     if (Child->Intersect(ray2, hit) == false) return false;
     
     //If intersection is true, set the hit position.

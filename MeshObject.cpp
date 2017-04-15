@@ -11,9 +11,11 @@
 MeshObject::MeshObject() {
 	NumVertexes=0;
 	NumTriangles=0;
+    NumMaterials=0;
 
 	Vertexes=0;
 	Triangles=0;
+    Materials=0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -21,6 +23,7 @@ MeshObject::MeshObject() {
 MeshObject::~MeshObject() {
 	delete []Vertexes;
 	delete []Triangles;
+    delete []Materials;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
