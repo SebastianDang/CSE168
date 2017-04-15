@@ -20,7 +20,7 @@ void test();
 ////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc,char **argv) {
-    project1();
+    project2();
     //test();
 	return 0;
 }
@@ -76,7 +76,7 @@ void project1() {
 
 	// Render image
 	cam.Render(scn);
-	cam.SaveBitmap("project1.bmp");
+	cam.SaveBitmap("PA1/project1.bmp");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -91,11 +91,18 @@ void project2(){
     ground.MakeBox(5.0f,0.1f,5.0f);
     scn.AddObject(ground);
     
-//    // Create dragon
-//    MeshObject dragon;
-//    dragon.LoadPLY("dragon.ply");
-//    dragon.Smooth();
-//    
+    // Create dragon
+    MeshObject dragon;
+    dragon.LoadPLY("Assets/dragon.ply");
+    dragon.Smooth();
+    
+    //Test
+    InstanceObject testInst(dragon);
+    glm::mat4x4 testMtx=glm::eulerAngleY(M_PI);
+    testMtx[3]=glm::vec4(-0.05f,0.0f,-0.1f,1.0f);
+    testInst.SetMatrix(testMtx);
+    scn.AddObject(testInst);
+
 //    BoxTreeObject tree;
 //    tree.Construct(dragon);
 //    scn.AddObject(tree);
@@ -135,7 +142,7 @@ void project2(){
     
     // Render image
     cam.Render(scn);
-    cam.SaveBitmap("project2.bmp");
+    cam.SaveBitmap("PA2/project2.bmp");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
