@@ -20,8 +20,8 @@ void test();
 ////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc,char **argv) {
-    project2();
-    //test();
+    //project1();
+    test();
 	return 0;
 }
 
@@ -95,13 +95,6 @@ void project2(){
     MeshObject dragon;
     dragon.LoadPLY("Assets/dragon.ply");
     dragon.Smooth();
-    
-    //Test
-    InstanceObject testInst(dragon);
-    glm::mat4x4 testMtx=glm::eulerAngleY(M_PI);
-    testMtx[3]=glm::vec4(-0.05f,0.0f,-0.1f,1.0f);
-    testInst.SetMatrix(testMtx);
-    scn.AddObject(testInst);
 
 //    BoxTreeObject tree;
 //    tree.Construct(dragon);
@@ -109,8 +102,8 @@ void project2(){
 //    
 //    // Create instance
 //    InstanceObject inst(tree);
-    glm::mat4x4 mtx=glm::eulerAngleY(M_PI);
-    mtx[3]=glm::vec4(-0.05f,0.0f,-0.1f,1.0f);
+//    glm::mat4x4 mtx=glm::eulerAngleY(M_PI);
+//    mtx[3]=glm::vec4(-0.05f,0.0f,-0.1f,1.0f);
 //    inst.SetMatrix(mtx);
 //    scn.AddObject(inst);
     
@@ -153,10 +146,11 @@ void test(){
     Scene scn;
     scn.SetSkyColor(Color(0.8, 0.9, 1.0));
     
-    // Create box
-    MeshObject box;
-    box.MakeBox(0.5, 0.2, 0.3);
-    scn.AddObject(box);
+    // Create dragon
+    MeshObject dragon;
+    dragon.LoadPLY("Assets/dragon.ply");
+    scn.AddObject(dragon);
+    dragon.Smooth();
     
     // Create light
     PointLight redlgt;
@@ -168,10 +162,12 @@ void test(){
     // Create camera
     Camera cam;
     cam.LookAt(glm::vec3(0.0f,0.0f,5.0f),glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0.0f,1.0f,0.0f));
-    cam.SetFOV(50.0); // NOTE: this is in degrees for UI purposes. Internally, it should be stored as radians
+    cam.SetFOV(50.0);
     cam.SetAspect(1.33);
-    cam.SetResolution(800,600);
+    cam.SetResolution(200,150);
+    
     // Render image
     cam.Render(scn);
     cam.SaveBitmap("test.bmp");
+    
 }
