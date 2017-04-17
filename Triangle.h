@@ -18,6 +18,8 @@ public:
 	bool Intersect(const Ray &ray, Intersection &hit) const;
     
     Vertex GetVtx(int index) {return *Vtx[index];}
+    
+    glm::vec3 GetCenter();
 
 private:
 	Vertex *Vtx[3];

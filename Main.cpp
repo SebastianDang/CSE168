@@ -3,6 +3,7 @@
 ////////////////////////////////////////
 
 #include "MeshObject.h"
+#include "BoxTreeObject.h"
 #include "InstanceObject.h"
 #include "Camera.h"
 #include "PointLight.h"
@@ -96,16 +97,16 @@ void project2(){
     dragon.LoadPLY("Assets/dragon.ply");
     dragon.Smooth();
 
-//    BoxTreeObject tree;
-//    tree.Construct(dragon);
-//    scn.AddObject(tree);
-//    
-//    // Create instance
-//    InstanceObject inst(tree);
-//    glm::mat4x4 mtx=glm::eulerAngleY(M_PI);
-//    mtx[3]=glm::vec4(-0.05f,0.0f,-0.1f,1.0f);
-//    inst.SetMatrix(mtx);
-//    scn.AddObject(inst);
+    BoxTreeObject tree;
+    tree.Construct(dragon);
+    scn.AddObject(tree);
+
+    // Create instance
+    InstanceObject inst(tree);
+    glm::mat4x4 mtx=glm::eulerAngleY(M_PI);
+    mtx[3]=glm::vec4(-0.05f,0.0f,-0.1f,1.0f);
+    inst.SetMatrix(mtx);
+    scn.AddObject(inst);
     
     // Create lights
     DirectLight sunlgt;

@@ -63,3 +63,19 @@ bool Triangle::Intersect(const Ray &ray, Intersection &hit) const{
     
     return true;
 }
+
+glm::vec3 Triangle::GetCenter(){
+    
+    //Positions
+    glm::vec3 a = Vtx[0]->Position;
+    glm::vec3 b = Vtx[1]->Position;
+    glm::vec3 c = Vtx[2]->Position;
+    
+    //Barycentric coordinates
+    float alpha = 0.5, beta = 0.5;
+    
+    //Calculate center
+    glm::vec3 center = a + (alpha * (b-a)) + (beta * (c-a));
+    
+    return center;
+}
