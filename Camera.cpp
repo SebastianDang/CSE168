@@ -8,6 +8,7 @@
 
 #include "Camera.h"
 #include "Ray.h"
+#include "RayTrace.h"
 
 //Empty Constructor.
 Camera::Camera(): BMP(0,0) {
@@ -69,35 +70,12 @@ void Camera::Render(Scene &s){
             //Check if the camera ray intersects with any objects in the scene.
             Intersection hit;
             
-            //Scene.Intersect( ... )
-            if (s.Intersect(camera_ray, hit)){
-                
-                //Result pixel color.
-                Color resultColor = Color(0.0f, 0.0f, 0.0f);
-                
-                //Compute lighting.
-                for (int i = 0; i < s.GetNumLights(); i++) {
-                    
-                    //Light variables.
-                    glm::vec3 pos = hit.Position;
-                    Color col;//Returned color set in illuminate.
-                    glm::vec3 toLight;//Shadows
-                    glm::vec3 ltPos;//Shadows
-                    
-                    //Calculate light intensity.
-                    float intensity = s.GetLight(i).Illuminate(pos, col, toLight, ltPos);
-                    float shadow = glm::dot(toLight, hit.Normal);//Will set to 0 if dot == 0.
-
-                    col.Scale(shadow * intensity);
-                    resultColor.Add(col);
-                }
-                
-                //We set the pixel accordingly.
-                BMP.SetPixel(x, y, resultColor.ToInt());
-            }
-            else{
-                BMP.SetPixel(x, y, s.GetSkyColor().ToInt());
-            }
+            //Calculate color.
+            RayTrace raytrace = RayTrace(s);
+            raytrace.TraceRay(camera_ray, hit, 1);
+            
+            //Set the pixel.
+            BMP.SetPixel(x, y, hit.Shade.ToInt());
             
         }
     }

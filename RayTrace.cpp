@@ -9,7 +9,8 @@
 #include "RayTrace.h"
 
 RayTrace::RayTrace(Scene &s){
-    
+    Scn = &s;
+    MaxDepth = 3;
 }
 
 bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
@@ -21,7 +22,7 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
     }
     
     //Compute shade due to lighting
-    hit.Shade = Color::BLACK;
+    hit.Shade = Color(0.0f, 0.0f, 0.0f);
     
     //For each light.
     for (int i = 0; i < Scn->GetNumLights(); i++){

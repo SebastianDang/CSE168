@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include "Triangle.h"
 
+#define PRECISION_OFFSET 0.001f
+
 //Empty Constructor.
 Triangle::Triangle(){
 }
@@ -31,7 +33,7 @@ bool Triangle::Intersect(const Ray &ray, Intersection &hit) const{
     
     //t = (p-a) dot [(b-a) x (c-a)] / det(M)
     float t = glm::dot(p-a, glm::cross(b-a, c-a)) / detM;
-    if (t < 0 || t>= hit.HitDistance) return false;//Verify t>0 and t<HitDistance (already hit).
+    if (t < PRECISION_OFFSET || t>= hit.HitDistance) return false;//Verify t>0 and t<HitDistance (already hit).
     
     //alpha = -d dot [(p-a) x (c-a)] / det(M)
     float alpha = glm::dot(-d, glm::cross(p-a, c-a)) / detM;
@@ -45,6 +47,7 @@ bool Triangle::Intersect(const Ray &ray, Intersection &hit) const{
     //Compute hit intersection values.
     hit.Position = p + (t * d);//Ray equation.
     hit.HitDistance = glm::distance(ray.Origin, hit.Position);//Correct for any scaling.
+    hit.HitDistance -= PRECISION_OFFSET;
     
     //Normals
     glm::vec3 na = Vtx[0]->Normal;
