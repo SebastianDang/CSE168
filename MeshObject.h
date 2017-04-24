@@ -22,7 +22,7 @@ public:
     
     void Smooth();
     
-    Triangle **getTriangles(){ return &Triangles; }//Might need to change.
+    Triangle **getTriangles();
     
     int getNumTriangles(){ return NumTriangles; }
     

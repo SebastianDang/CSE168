@@ -226,4 +226,10 @@ void MeshObject::Smooth() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
+Triangle** MeshObject::getTriangles(){
+    Triangle** tris = new Triangle*[NumTriangles];
+    for (int i = 0; i < NumTriangles; i++) {
+        tris[i] = &Triangles[i];
+    }
+    return tris;
+}
