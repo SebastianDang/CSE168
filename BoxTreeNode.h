@@ -14,7 +14,7 @@
 #include "Object.h"
 #include "Triangle.h"
 
-#define MaxTrianglesPerBox 3
+#define MaxTrianglesPerBox 10
 
 class BoxTreeNode {
     
