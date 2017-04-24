@@ -26,53 +26,46 @@ bool BoxTreeNode::Intersect(const Ray &ray, Intersection &hit){
         return IntersectTriangles(ray, hit);
     }
     
-    //Test all children nodes. 2 Children.
-    bool child1Hit = false, child2Hit = false;
+    //Test both children. Gets an initial t value.
     float t1, t2;
     
-    child1Hit = Child1->IntersectVolume(ray, t1);
-    child2Hit = Child2->IntersectVolume(ray, t2);
+    Child1->IntersectVolume(ray, t1);
+    Child2->IntersectVolume(ray, t2);
     
     //Full Recursive Test on children, sorted in order of distance.
-    if (!child1Hit && !child2Hit) {
-        return false;
-    }
-    else if (child1Hit && !child2Hit) {
-        return Child1->Intersect(ray, hit);
-    }
-    else if (!child1Hit && child2Hit) {
-        return Child2->Intersect(ray, hit);
-    }
-    else{
-        if (t1 < t2) {
-            if (Child1->Intersect(ray, hit)) {
-                if (t2 < hit.HitDistance){
-                    Child2->Intersect(ray, hit);
-                }
-                return true;
-            }
-            else return Child2->Intersect(ray, hit);
+    bool success = false;
+    if (t1 < t2){//t1 is closer.
+        if (t1 < hit.HitDistance){
+            if (Child1->Intersect(ray, hit)) success = true;
         }
-        else { //t2 <= t1
-            if (Child2->Intersect(ray, hit)) {
-                if (t1 < hit.HitDistance){
-                    Child1->Intersect(ray, hit);
-                }
-                return true;
-            }
-            else return Child1->Intersect(ray, hit);
+    
+        if (t2 < hit.HitDistance){
+            if (Child2->Intersect(ray, hit)) success = true;
         }
     }
+    
+    else{//t2 is closer.
+        if (t2 < hit.HitDistance){
+            if (Child2->Intersect(ray, hit)) success = true;
+        }
+        
+        if (t1 < hit.HitDistance){
+            if (Child1->Intersect(ray, hit)) success = true;
+        }
+    }
+    
+    return success;
 }
 
+/* Loops through each triangle to determine if an intersection is found. */
 bool BoxTreeNode::IntersectTriangles(const Ray &ray, Intersection &hit){
     
-    //Test the closest hit
+    //Test for the closest hit
     bool triangleHit = false;
     
     //Test against each triangle.
     for (int i = 0; i < numTriangles; i++){
-        if (Tri[i]->Intersect(ray, hit)) {//This will properly set the closest triangle.
+        if (Tri[i]->Intersect(ray, hit)) {//Set the closest triangle in hit.
             triangleHit = true;
         }
     }
@@ -140,7 +133,7 @@ bool BoxTreeNode::IntersectVolume(const Ray &ray, float &t){
         return true;
     }
     
-    //If t_max < 0, miss. TODO: Proper check here.
+    //If t_max < 0, miss. TODO: Proper check here?
     return false;
 }
 

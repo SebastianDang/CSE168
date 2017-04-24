@@ -21,8 +21,8 @@ void test();
 ////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc,char **argv) {
-    //project2();
-    test();
+    project2();
+    //test();
 	return 0;
 }
 
