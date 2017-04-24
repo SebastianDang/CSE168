@@ -14,7 +14,7 @@
 #include "Object.h"
 #include "Triangle.h"
 
-#define MaxTrianglesPerBox 10
+#define MaxTrianglesPerBox 3
 
 class BoxTreeNode {
     
@@ -26,7 +26,7 @@ public:
     
     bool IntersectTriangles(const Ray &ray, Intersection &hit);
     
-    bool IntersectVolume(const Ray &ray, Intersection &hit);
+    bool IntersectVolume(const Ray &ray, float &t);
     
     void Construct(int count, Triangle **tri);
 
@@ -40,6 +40,8 @@ private:
     Triangle *Tri[MaxTrianglesPerBox];
     //Count the number of triangles.
     int numTriangles;
+    //Flag to keep track of leaves.
+    bool leaf;
 };
 
 

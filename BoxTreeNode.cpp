@@ -10,8 +10,10 @@
 
 
 BoxTreeNode::BoxTreeNode(){
-    
+    numTriangles = 0;
+    leaf = false;
 }
+
 BoxTreeNode::~BoxTreeNode(){
     
 }
@@ -20,41 +22,47 @@ BoxTreeNode::~BoxTreeNode(){
 bool BoxTreeNode::Intersect(const Ray &ray, Intersection &hit){
     
     //If this is a leaf node, test against all triangles.
-    if (Child1 == NULL && Child2 == NULL){
+    if (leaf){
         return IntersectTriangles(ray, hit);
     }
     
-    //Test all children nodes. 2 Children otherwise.
-    Intersection volHit1;
-    Intersection volHit2;
+    //Test all children nodes. 2 Children.
     bool child1Hit = false, child2Hit = false;
+    float t1, t2;
     
-    volHit1.HitDistance = hit.HitDistance;//Avoid testing volumes closer than the best hit so far.
-    volHit2.HitDistance = hit.HitDistance;
-
-    child1Hit = Child1->IntersectVolume(ray, volHit1);
-    child2Hit = Child2->IntersectVolume(ray, volHit2);
-    
-    //Optimization to avoid recursing deeper.
-    if (child1Hit == false && child2Hit == false){
-        return false;
-    }
+    child1Hit = Child1->IntersectVolume(ray, t1);
+    child2Hit = Child2->IntersectVolume(ray, t2);
     
     //Full Recursive Test on children, sorted in order of distance.
-    bool success = false;
-    if (volHit1.HitDistance < volHit2.HitDistance){
-        if (volHit1.HitDistance < hit.HitDistance){
-            if (Child1->Intersect(ray, hit)) { success = true; }
+    if (!child1Hit && !child2Hit) {
+        return false;
+    }
+    else if (child1Hit && !child2Hit) {
+        return Child1->Intersect(ray, hit);
+    }
+    else if (!child1Hit && child2Hit) {
+        return Child2->Intersect(ray, hit);
+    }
+    else{
+        if (t1 < t2) {
+            if (Child1->Intersect(ray, hit)) {
+                if (t2 < hit.HitDistance){
+                    Child2->Intersect(ray, hit);
+                }
+                return true;
+            }
+            else return Child2->Intersect(ray, hit);
+        }
+        else { //t2 <= t1
+            if (Child2->Intersect(ray, hit)) {
+                if (t1 < hit.HitDistance){
+                    Child1->Intersect(ray, hit);
+                }
+                return true;
+            }
+            else return Child1->Intersect(ray, hit);
         }
     }
-    else if (volHit2.HitDistance < volHit1.HitDistance){
-        if (volHit2.HitDistance < hit.HitDistance){
-            if (Child2->Intersect(ray, hit)) { success = true; }
-        }
-    }
-    
-    //Return if hit.
-    return success;
 }
 
 bool BoxTreeNode::IntersectTriangles(const Ray &ray, Intersection &hit){
@@ -73,12 +81,12 @@ bool BoxTreeNode::IntersectTriangles(const Ray &ray, Intersection &hit){
     return triangleHit;
 }
 
-/* Ray AABB Test. This is the same as Intersect Volume. */
-bool BoxTreeNode::IntersectVolume(const Ray &ray, Intersection &hit){
+/* Ray AABB Test. Intersect Volume. */
+bool BoxTreeNode::IntersectVolume(const Ray &ray, float &t){
     
     //Min and Max corners of the box.
-    glm::vec3 a = glm::vec3(BoxMin);
-    glm::vec3 b = glm::vec3(BoxMax);
+    glm::vec3 a = BoxMin;
+    glm::vec3 b = BoxMax;
     
     //Ray origin and direction.
     glm::vec3 p = ray.Origin;
@@ -120,21 +128,17 @@ bool BoxTreeNode::IntersectVolume(const Ray &ray, Intersection &hit){
     if (max_z < t_max) { t_max = max_z; }
     
     //If t_min < t_max, the ray intersects at t=t_min or t=t_max.
-    float t = hit.HitDistance;
     if (t_min <= t_max){
-        //t_max if t_min < 0.
-        if (t_min < 0){
-            t = t_max;
-        }
-        //t_min otherwise.
-        else {
+        //If t_min is >= 0, set t = t_min.
+        if (t_min >= 0){
             t = t_min;
         }
+        //Else t_max.
+        else {
+            t = t_max;
+        }
+        return true;
     }
-    
-    //Set the intersection values. TODO: Normal, TexCoords? Maybe not since it's not a leaf.
-    hit.Position = p + (t * d);//Ray equation.
-    hit.HitDistance = glm::distance(ray.Origin, hit.Position);//Correct for any scaling.
     
     //If t_max < 0, miss. TODO: Proper check here.
     return false;
@@ -151,9 +155,9 @@ void BoxTreeNode::Construct(int count, Triangle **tri){
     
     //Compute the BoxMin and BoxMax to fit around all the triangles.
     for (int i = 0; i < count; i++){
-        Triangle *triangle = tri[i];
+        Triangle *triangle = tri[i];//Get the current triangle.
         for (int j = 0; j < 3; j++){
-            Vertex vertex = triangle->GetVtx(j);
+            Vertex vertex = triangle->GetVtx(j);//Get each vertex from the triangle.
             //Calculate min, max for x, y, z.
             if (vertex.Position.x < min_X) { min_X = vertex.Position.x; }
             if (vertex.Position.y < min_Y) { min_Y = vertex.Position.y; }
@@ -167,11 +171,12 @@ void BoxTreeNode::Construct(int count, Triangle **tri){
     BoxMax = glm::vec3(max_X, max_Y, max_Z);
     
     //Check if this is a leaf node.
-    if(count <= MaxTrianglesPerBox) {
+    if(count <= MaxTrianglesPerBox){
         //Copy triangles to BoxTreeNode’s Tri array
         for (int i = 0; i < count; i++){
             Tri[i] = tri[i];
         }
+        leaf = true;
         return;
     }
     

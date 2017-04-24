@@ -23,16 +23,23 @@ void BoxTreeObject::Construct(MeshObject &mesh){
     int numTriangles = mesh.getNumTriangles();
     Triangle **triangles = mesh.getTriangles();
     
+    //Debug
+    printf("Constructing %d triangles\n", numTriangles);
+    
     //Construct from the triangles.
     RootNode->Construct(numTriangles, triangles);
     
     //Debug
-//    Triangle *triangle = triangles[0];
-//    Vertex vtx = triangle->GetVtx(3);
-//    printf("Done Constructing\n");
+    printf("Done Constructing\n");
 }
 
 bool BoxTreeObject::Intersect(const Ray &ray, Intersection &hit){
     //Intersect starting at the root.
-    return RootNode->Intersect(ray, hit);
+    float t;
+    if (RootNode->IntersectVolume(ray, t)){
+        return RootNode->Intersect(ray, hit);
+    }
+    
+    //Didn't intersect anything.
+    return false;
 }
