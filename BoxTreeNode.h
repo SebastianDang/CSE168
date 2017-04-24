@@ -24,6 +24,10 @@ public:
     
     bool Intersect(const Ray &ray, Intersection &hit);
     
+    bool IntersectTriangles(const Ray &ray, Intersection &hit);
+    
+    bool IntersectVolume(const Ray &ray, Intersection &hit);
+    
     void Construct(int count, Triangle **tri);
 
 private:
@@ -34,6 +38,8 @@ private:
     BoxTreeNode *Child1, *Child2;
     //Usually 10 or less triangles at the leaf.
     Triangle *Tri[MaxTrianglesPerBox];
+    //Count the number of triangles.
+    int numTriangles;
 };
 
 

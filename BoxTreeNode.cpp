@@ -16,16 +16,138 @@ BoxTreeNode::~BoxTreeNode(){
     
 }
 
+/* Intersect this node if it is the leaf, and continue through it's children. */
 bool BoxTreeNode::Intersect(const Ray &ray, Intersection &hit){
     
+    //If this is a leaf node, test against all triangles.
+    if (Child1 == NULL && Child2 == NULL){
+        return IntersectTriangles(ray, hit);
+    }
+    
+    //Test all children nodes. 2 Children otherwise.
+    Intersection volHit1;
+    Intersection volHit2;
+    bool child1Hit = false, child2Hit = false;
+    
+    volHit1.HitDistance = hit.HitDistance;//Avoid testing volumes closer than the best hit so far.
+    volHit2.HitDistance = hit.HitDistance;
+
+    child1Hit = Child1->IntersectVolume(ray, volHit1);
+    child2Hit = Child2->IntersectVolume(ray, volHit2);
+    
+    //Optimization to avoid recursing deeper.
+    if (child1Hit == false && child2Hit == false){
+        return false;
+    }
+    
+    //Full Recursive Test on children, sorted in order of distance.
+    bool success = false;
+    if (volHit1.HitDistance < volHit2.HitDistance){
+        if (volHit1.HitDistance < hit.HitDistance){
+            if (Child1->Intersect(ray, hit)) { success = true; }
+        }
+    }
+    else if (volHit2.HitDistance < volHit1.HitDistance){
+        if (volHit2.HitDistance < hit.HitDistance){
+            if (Child2->Intersect(ray, hit)) { success = true; }
+        }
+    }
+    
+    //Return if hit.
+    return success;
+}
+
+bool BoxTreeNode::IntersectTriangles(const Ray &ray, Intersection &hit){
+    
+    //Test the closest hit
+    bool triangleHit = false;
+    
+    //Test against each triangle.
+    for (int i = 0; i < numTriangles; i++){
+        if (Tri[i]->Intersect(ray, hit)) {//This will properly set the closest triangle.
+            triangleHit = true;
+        }
+    }
+
+    //Return if a triangle is hit.
+    return triangleHit;
+}
+
+/* Ray AABB Test. This is the same as Intersect Volume. */
+bool BoxTreeNode::IntersectVolume(const Ray &ray, Intersection &hit){
+    
+    //Min and Max corners of the box.
+    glm::vec3 a = glm::vec3(BoxMin);
+    glm::vec3 b = glm::vec3(BoxMax);
+    
+    //Ray origin and direction.
+    glm::vec3 p = ray.Origin;
+    glm::vec3 d = ray.Direction;
+    
+    //Calculate t values.
+    glm::vec3 t1, t2;
+    
+    t1.x = (a.x-p.x) / d.x;
+    t2.x = (b.x-p.x) / d.x;
+    
+    t1.y = (a.y-p.y) / d.y;
+    t2.y = (b.y-p.y) / d.y;
+    
+    t1.z = (a.z-p.z) / d.z;
+    t2.z = (b.z-p.z) / d.z;
+    
+    //Calculate min and max.
+    float min_x = fmin(t1.x, t2.x);
+    float min_y = fmin(t1.y, t2.y);
+    float min_z = fmin(t1.z, t2.z);
+    
+    float max_x = fmax(t1.x, t2.x);
+    float max_y = fmax(t1.y, t2.y);
+    float max_z = fmax(t1.z, t2.z);
+    
+    //Calculate t_min and t_max.
+    float t_min = -INFINITY;
+    float t_max = INFINITY;
+    
+    //Get the maximum of the minimum values.
+    if (min_x > t_min) { t_min = min_x; }
+    if (min_y > t_min) { t_min = min_y; }
+    if (min_z > t_min) { t_min = min_z; }
+    
+    //Get the minimum of the maximum values.
+    if (max_x < t_max) { t_max = max_x; }
+    if (max_y < t_max) { t_max = max_y; }
+    if (max_z < t_max) { t_max = max_z; }
+    
+    //If t_min < t_max, the ray intersects at t=t_min or t=t_max.
+    float t = hit.HitDistance;
+    if (t_min <= t_max){
+        //t_max if t_min < 0.
+        if (t_min < 0){
+            t = t_max;
+        }
+        //t_min otherwise.
+        else {
+            t = t_min;
+        }
+    }
+    
+    //Set the intersection values. TODO: Normal, TexCoords? Maybe not since it's not a leaf.
+    hit.Position = p + (t * d);//Ray equation.
+    hit.HitDistance = glm::distance(ray.Origin, hit.Position);//Correct for any scaling.
+    
+    //If t_max < 0, miss. TODO: Proper check here.
     return false;
 }
 
+/* Top-Down Construction Algorithm. */
 void BoxTreeNode::Construct(int count, Triangle **tri){
     
     //Initialize min, max, scale values for each coordinate.
     float min_X = INFINITY, min_Y = INFINITY, min_Z = INFINITY;//Minimum set to infinity
     float max_X = -INFINITY, max_Y = -INFINITY, max_Z = -INFINITY;//Maximum set to -infinity
+    
+    numTriangles = count;//Set number of triangles.
     
     //Compute the BoxMin and BoxMax to fit around all the triangles.
     for (int i = 0; i < count; i++){
@@ -56,22 +178,22 @@ void BoxTreeNode::Construct(int count, Triangle **tri){
     //Determine the largest box dimension: x, y, or z.
     float longest_dim = -INFINITY;
     int dim = 0;
-    float dim_x = (max_X - min_X);
-    float dim_y = (max_Y - min_Y);
-    float dim_z = (max_Z - min_Z);
+    float dim_x = (max_X - min_X);//0
+    float dim_y = (max_Y - min_Y);//1
+    float dim_z = (max_Z - min_Z);//2
     if (dim_x > longest_dim) { longest_dim = dim_x; dim = 0; }
     if (dim_y > longest_dim) { longest_dim = dim_y; dim = 1; }
     if (dim_z > longest_dim) { longest_dim = dim_z; dim = 2; }
 
     //Compute splitting the plane halfway along the largest dimension.
     float split = 0;
-    if (dim == 0){//X
+    if (dim == 0){//Split across X.
         split = min_X + (longest_dim/2.0f);
     }
-    else if (dim == 1){//Y
+    else if (dim == 1){//Split across Y.
         split = min_Y + (longest_dim/2.0f);
     }
-    else if (dim == 2){//Z
+    else if (dim == 2){//Split across Z.
         split = min_Z + (longest_dim/2.0f);
     }
     
@@ -86,21 +208,22 @@ void BoxTreeNode::Construct(int count, Triangle **tri){
         //Compute center of triangle & determine which side of splitting plane
         glm::vec3 center = triangle->GetCenter();
         //Add to appropriate group
-        if (dim == 0){
+        if (dim == 0){//Calculate split among X, add into < or >= groups.
             if (center.x < split){ tri1[count1++] = triangle; }
             else { tri2[count2++] = triangle; }
         }
-        else if (dim == 1){
+        else if (dim == 1){//Calculate split among Y, add into < or >= groups.
             if (center.y < split){ tri1[count1++] = triangle; }
             else { tri2[count2++] = triangle; }
         }
-        else if (dim == 2){
+        else if (dim == 2){//Calculate split among Z, add into < or >= groups.
             if (center.z < split){ tri1[count1++] = triangle; }
             else { tri2[count2++] = triangle; }
         }
     }
     
-    //Check if either group is empty. If so, move (at least) 1 triangle into that group TODO:
+    //Check if either group is empty. If so, move (at least) 1 triangle into that group
+    //TODO: Calculate a more efficient algorithm for splitting.
     if(count1 == 0){
         tri1[count1++] = tri2[--count2];
     }

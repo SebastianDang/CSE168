@@ -21,7 +21,11 @@ public:
     bool LoadPLY(const char *filename, Material *mtl=0);
     
     void Smooth();
-
+    
+    Triangle **getTriangles(){ return &Triangles; }//Might need to change.
+    
+    int getNumTriangles(){ return NumTriangles; }
+    
 private:
 	int NumVertexes,NumTriangles,NumMaterials;
 	Vertex *Vertexes;
