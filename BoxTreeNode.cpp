@@ -28,9 +28,21 @@ bool BoxTreeNode::Intersect(const Ray &ray, Intersection &hit){
     
     //Test both children. Gets an initial t value.
     float t1, t2;
+    bool c1Hit = false, c2Hit = false;
     
-    Child1->IntersectVolume(ray, t1);
-    Child2->IntersectVolume(ray, t2);
+    c1Hit = Child1->IntersectVolume(ray, t1);
+    c2Hit = Child2->IntersectVolume(ray, t2);
+    
+    //Optimization. If child(ren) isn't hit, end early.
+    if (!c1Hit && !c2Hit) {
+        return false;
+    }
+    else if (c1Hit && !c2Hit) {
+        return Child1->Intersect(ray, hit);
+    }
+    else if (!c1Hit && c2Hit) {
+        return Child2->Intersect(ray, hit);
+    }
     
     //Full Recursive Test on children, sorted in order of distance.
     bool success = false;

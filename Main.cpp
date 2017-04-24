@@ -132,7 +132,7 @@ void project2(){
     cam.LookAt(glm::vec3(-0.1f,0.1f,0.2f),glm::vec3(-0.05f,0.12f,0.0f), glm::vec3(0,1.0f,0));
     cam.SetFOV(40.0f);
     cam.SetAspect(1.33f);
-    cam.SetResolution(800,600);
+    cam.SetResolution(80,60);
     
     // Render image
     cam.Render(scn);
