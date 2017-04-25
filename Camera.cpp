@@ -37,6 +37,13 @@ void Camera::LookAt(const glm::vec3 &pos, const glm::vec3 &target, const glm::ve
 //Render the scene onto the Bitmap.
 void Camera::Render(Scene &s){
     
+    //Start time.
+    clock_t start = clock();
+    long double start_time = start / (double) CLOCKS_PER_SEC;
+    printf("Render Start Time: %Lf\n", start_time);
+    
+    // ----- Render Operation. ----- //
+    
     //Variables.
     int x,y;
     
@@ -79,7 +86,17 @@ void Camera::Render(Scene &s){
             
         }
     }
-
+    
+    // ----- Render Operation. ----- //
+    
+    //End time.
+    clock_t end = clock();
+    long double end_time = end / (double) CLOCKS_PER_SEC;
+    printf("Render End Time: %Lf\n", end_time);
+    
+    //Calculate duration.
+    long double duration = end_time - start_time;
+    printf("Time Elapsed: %Lf seconds.\n\n", duration);
 }
 
 //Save the Bitmap by writing it to a file.
