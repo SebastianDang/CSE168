@@ -3,6 +3,7 @@
 ////////////////////////////////////////
 
 #pragma once
+#include "glm/glm.hpp"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -26,6 +27,17 @@ public:
 		return (r<<16) | (g<<8) | b;
 	}
 	void FromInt(int c)						{Set(float((c>>16)&0xff)/255.0f,float((c>>8)&0xff)/255.0f,float(c&0xff)/255.0f);}
+    
+    glm::vec3 ToVec(){ return glm::vec3(Red, Green, Blue); }
+    void FromVec(glm::vec3 c){ Red=c.r; Green=c.g; Blue=c.b; }
+    
+    float getRed(){ return Red; }
+    float getGreen(){ return Green; }
+    float getBlue(){ return Blue; }
+    
+    void setRed(float r){ Red = r; }
+    void setGreen(float g){ Green = g; }
+    void setBlue(float b){ Blue = b; }
 
 	static Color WHITE,GREY,BLACK;
 	static Color RED,YELLOW,BLUE,GREEN;

@@ -22,7 +22,7 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
     }
     
     //Compute shade due to lighting
-    hit.Shade = Color(0.0f, 0.0f, 0.0f);
+    hit.Shade = Color::BLACK;
     
     //For each light.
     for (int i = 0; i < Scn->GetNumLights(); i++){
