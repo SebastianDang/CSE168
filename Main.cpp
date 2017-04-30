@@ -2,6 +2,7 @@
 // Main.cpp
 ////////////////////////////////////////
 
+#include "LambertMaterial.h"
 #include "MeshObject.h"
 #include "BoxTreeObject.h"
 #include "InstanceObject.h"
@@ -16,12 +17,13 @@
 
 void project1();
 void project2();
+void project3();
 void test();
 
 ////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc,char **argv) {
-    project2();
+    project1();
     //test();
 	return 0;
 }
@@ -29,7 +31,6 @@ int main(int argc,char **argv) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void project1() {
-    
 	// Create scene
 	Scene scn;
 	scn.SetSkyColor(Color(0.8f, 0.9f, 1.0f));
@@ -138,6 +139,76 @@ void project2(){
     cam.Render(scn);
     cam.SaveBitmap("PA2/project2.bmp");
 }
+
+////////////////////////////////////////////////////////////////////////////////
+/*
+void project3() {
+    // Create scene
+    Scene scn;
+    scn.SetSkyColor(Color(0.8f,0.9f,1.0f));
+    
+    // Create ground
+    LambertMaterial groundMtl;
+    groundMtl.setDiffuse(Color(0.25f,0.25f,0.25f));
+    
+    MeshObject ground;
+    ground.MakeBox(2.0f,0.11f,2.0f,&groundMtl);
+    scn.AddObject(ground);
+    
+    // Load dragon mesh
+    MeshObject dragon;
+    dragon.LoadPLY("dragon.ply");
+    
+    // Create box tree
+    BoxTreeObject tree;
+    tree.Construct(dragon);
+    
+    // Materials
+    LambertMaterial white;
+    white.setDiffuse(Color(0.7f,0.7f,0.7f));
+    
+    LambertMaterial red;
+    red.setDiffuse(Color(0.7f,0.1f,0.1f));
+    
+    MetalMaterial metal;
+    metal.setDiffuse(Color(0.95f,0.64f,0.54f));
+    
+    const int numDragons=4;
+    Material *mtl[numDragons]={&white,&metal,&red,&white};
+    
+    // Create dragon instances
+    glm::mat4 mtx;
+    for(int i=0;i<numDragons;i++) {
+        InstanceObject *inst=new InstanceObject(tree);
+        mtx[3]=glm::vec4(0.0f,0.0f,0.3f*(float(i)/float(numDragons-1)-0.5f),1.0f);
+        inst->SetMatrix(mtx);
+        //inst->SetMaterial(mtl[i]);
+        scn.AddObject(*inst);
+    }
+    
+    
+    // Create lights
+    DirectLight sunlgt;
+    sunlgt.SetBaseColor(Color(1.0f, 1.0f, 0.9f));
+    sunlgt.SetIntensity(1.0f);
+    sunlgt.SetDirection(glm::vec3(2.0f, -3.0f, -2.0f));
+    scn.AddLight(sunlgt);
+    
+    // Create camera
+    Camera cam;
+    cam.SetResolution(640,480);
+    cam.SetAspect(1.33f);
+    cam.LookAt(glm::vec3(-0.5f,0.25f,-0.2f),glm::vec3(0.0f,0.15f,0.0f), glm::vec3(0,1,0));
+    cam.SetFOV(40.0f);
+    cam.SetSuperSample(10,10);
+    cam.SetJitter(true);
+    cam.SetShirley(true);
+    
+    // Render image
+    cam.Render(scn);
+    cam.SaveBitmap("PA3/project3.bmp");
+}
+*/
 
 ////////////////////////////////////////////////////////////////////////////////
 

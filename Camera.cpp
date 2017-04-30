@@ -99,6 +99,22 @@ void Camera::Render(Scene &s){
     printf("Time Elapsed: %Lf seconds.\n\n", duration);
 }
 
+//Set the super sample size.
+void Camera::SetSuperSample(int xsamples, int ysamples){
+    X_Samples = xsamples;
+    Y_Samples = ysamples;
+}
+
+//Set Jitter to true or false.
+void Camera::SetJitter(bool enable){
+    Jitter = enable;
+}
+
+//Set Shirley to true or false.
+void Camera::SetShirley(bool enable){
+    Shirley = enable;
+}
+
 //Save the Bitmap by writing it to a file.
 void Camera::SaveBitmap(char *filename){
     BMP.SaveBMP(filename);

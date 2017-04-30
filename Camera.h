@@ -30,6 +30,12 @@ public:
     
     void Render(Scene &s);
     
+    void SetSuperSample(int xsamples, int ysamples); //Supersample each pixel in a x*y grid.
+    
+    void SetJitter(bool enable); //Toggle Jittering for each supersample.
+    
+    void SetShirley(bool enable); //Toggle Shirley mapping.
+    
     void SaveBitmap(char *filename);
     
 private:
@@ -44,6 +50,10 @@ private:
     
     //Camera's Matrix in world space.
     glm::mat4x4 WorldMatrix;
+    
+    //Anti Aliasing.
+    int X_Samples, Y_Samples;
+    bool Jitter, Shirley;
     
 };
 
