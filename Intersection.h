@@ -12,7 +12,7 @@ class Material;
 
 class Intersection {
 public:
-	Intersection()			{HitDistance=1e10; Mtl=0;}
+    Intersection() {HitDistance=1e10; Position=glm::vec3(0.0f); Normal=glm::vec3(0.0f); Mtl=0; Shade = Color::BLACK; }
 
 public:
 	// Ray intersection data

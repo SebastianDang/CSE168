@@ -21,6 +21,12 @@ Camera::Camera(): BMP(0,0) {
     
     //Initial matrix.
     WorldMatrix = glm::mat4x4(0.0f);
+    
+    //Super Sampling.
+    X_Samples = 1;
+    Y_Samples = 1;
+    Jitter = false;
+    Shirley = false;
 }
 
 //Camera lookat matrix from position, target, and up vectors.
@@ -36,13 +42,6 @@ void Camera::LookAt(const glm::vec3 &pos, const glm::vec3 &target, const glm::ve
 
 //Render the scene onto the Bitmap.
 void Camera::Render(Scene &s){
-    
-    //Start time.
-    clock_t start = clock();
-    long double start_time = start / (double) CLOCKS_PER_SEC;
-    printf("Render Start Time: %Lf\n", start_time);
-    
-    // ----- Render Operation. ----- //
     
     //Variables.
     int x,y;
@@ -65,38 +64,81 @@ void Camera::Render(Scene &s){
     for (y = 0; y < YRes; y++){
         for (x = 0; x < XRes; x++){
             
-            //Get the center x and y coordinates.
-            float fx = ((float(x) + 0.5f) / float(XRes)) - 0.5f;
-            float fy = ((float(y) + 0.5f) / float(YRes)) - 0.5f;
+            //Accumulated Color.
+            Color accumCol = Color::BLACK;
             
-            //Create the ray.
-            Ray camera_ray;
-            camera_ray.Origin = glm::vec3(d);
-            camera_ray.Direction = glm::normalize( (fx * scaleX * a) + (fy * scaleY * b) - c);
+            X_Samples = 4; Y_Samples = 4;//Testing
+            Jitter = false;
+            Shirley = false;
             
-            //Check if the camera ray intersects with any objects in the scene.
-            Intersection hit;
+            //SuperSample. For each super sample...
+            for (int i = 0; i < X_Samples; i++){
+                for (int j = 0; j < Y_Samples; j++){
+                    
+                    //Compute subpixel position (0...1 range in x & y).
+                    float sub_x = float(i) / float(X_Samples);
+                    float sub_y = float(j) / float(Y_Samples);
+
+                    //Apply Jitter to subpixel position.
+                    if (Jitter){
+
+
+                    }
+                    
+                    //Apply Shirley to subpixel position.
+                    if (Shirley){
+                        //X
+                        if (sub_x < 0.5){
+                            sub_x = -0.5 + sqrtf(2*sub_x);
+                        }
+                        else if (sub_x >= 0.5){
+                            sub_x = 1.5 - sqrtf(2 - 2*sub_x);
+                        }
+                        //Y
+                        if (sub_y < 0.5){
+                            sub_y = -0.5 + sqrtf(2*sub_y);
+                        }
+                        else if (sub_y >= 0.5){
+                            sub_y = 1.5 - sqrtf(2 - 2*sub_y);
+                        }
+                    }
+                    
+                    //Turn the subpixel position into pixel position & trace path.
+                    float sample_x = x + sub_x;
+                    float sample_y = y + sub_y;
+                    
+                    //Get the center x and y coordinates.
+                    float fx = ((float(sample_x) + 0.5f) / float(XRes)) - 0.5f;
+                    float fy = ((float(sample_y) + 0.5f) / float(YRes)) - 0.5f;
+
+                    
+                    //Create the ray.
+                    Ray camera_ray;
+                    camera_ray.Origin = glm::vec3(d);
+                    camera_ray.Direction = glm::normalize( (fx * scaleX * a) + (fy * scaleY * b) - c);
+                    
+                    //Check if the camera ray intersects with any objects in the scene.
+                    Intersection hit;
+
+                    //Calculate color.
+                    RayTrace raytrace = RayTrace(s);
+                    raytrace.TraceRay(camera_ray, hit, 1);
+                    
+                    //Add to accumulation.
+                    accumCol.Add(hit.Shade);
+                }
+            }
             
-            //Calculate color.
-            RayTrace raytrace = RayTrace(s);
-            raytrace.TraceRay(camera_ray, hit, 1);
-            
+            //Scale from the super sample.
+            float scale = float(1)/(X_Samples * Y_Samples);
+            accumCol.Scale(scale);
+
             //Set the pixel.
-            BMP.SetPixel(x, y, hit.Shade.ToInt());
+            BMP.SetPixel(x, y, accumCol.ToInt());
             
         }
     }
-    
-    // ----- Render Operation. ----- //
-    
-    //End time.
-    clock_t end = clock();
-    long double end_time = end / (double) CLOCKS_PER_SEC;
-    printf("Render End Time: %Lf\n", end_time);
-    
-    //Calculate duration.
-    long double duration = end_time - start_time;
-    printf("Time Elapsed: %Lf seconds.\n\n", duration);
+
 }
 
 //Set the super sample size.

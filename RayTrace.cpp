@@ -69,6 +69,8 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
     
     if(depth == MaxDepth) return true;
     
+    return true;//Avoid for now.
+    
     //Compute shade due to reflections/refractions
     for (int i = 0; i < SecondaryRays; i++){
         
@@ -77,7 +79,7 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
         Intersection newHit;
         
         //Compute ray intensity (based on fR or fT) TODO: Slide 3 p43
-        float intensity = 0.0f;//Material?
+        float intensity = 0.001f;//Material?
         
         //Recursive TraceRay.
         TraceRay(newRay, newHit);
@@ -85,6 +87,7 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
         newHit.Shade.Scale(intensity);
         hit.Shade.Add(newHit.Shade);
     }
+    
     
     return true;
 }
