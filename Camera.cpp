@@ -43,6 +43,11 @@ void Camera::LookAt(const glm::vec3 &pos, const glm::vec3 &target, const glm::ve
 //Render the scene onto the Bitmap.
 void Camera::Render(Scene &s){
     
+    //Start time.
+    clock_t start = clock();
+    long double start_time = start / (double) CLOCKS_PER_SEC;
+    printf("Render Start Time: %Lf\n", start_time);
+    
     //Variables.
     int x,y;
     
@@ -67,8 +72,9 @@ void Camera::Render(Scene &s){
             //Accumulated Color.
             Color accumCol = Color::BLACK;
             
-            X_Samples = 4; Y_Samples = 4;//Testing
-            Jitter = false;
+            //Testing
+            X_Samples = 10; Y_Samples = 10;
+            Jitter = true;
             Shirley = false;
             
             //SuperSample. For each super sample...
@@ -78,12 +84,6 @@ void Camera::Render(Scene &s){
                     //Compute subpixel position (0...1 range in x & y).
                     float sub_x = float(i) / float(X_Samples);
                     float sub_y = float(j) / float(Y_Samples);
-
-                    //Apply Jitter to subpixel position.
-                    if (Jitter){
-
-
-                    }
                     
                     //Apply Shirley to subpixel position.
                     if (Shirley){
@@ -101,6 +101,17 @@ void Camera::Render(Scene &s){
                         else if (sub_y >= 0.5){
                             sub_y = 1.5 - sqrtf(2 - 2*sub_y);
                         }
+                    }
+
+                    //Apply Jitter to subpixel position.
+                    if (Jitter){
+                        //Get jitter vals.
+                        float jitter_x = (((rand()%200) - 100) / 100.0f) / X_Samples;
+                        float jitter_y = (((rand()%200) - 100) / 100.0f) / Y_Samples;
+                        
+                        //Apply.
+                        sub_x += jitter_x;
+                        sub_y += jitter_y;
                     }
                     
                     //Turn the subpixel position into pixel position & trace path.
@@ -138,6 +149,15 @@ void Camera::Render(Scene &s){
             
         }
     }
+    
+    //End time.
+    clock_t end = clock();
+    long double end_time = end / (double) CLOCKS_PER_SEC;
+    printf("Render End Time: %Lf\n", end_time);
+    
+    //Calculate duration.
+    long double duration = end_time - start_time;
+    printf("Time Elapsed: %Lf seconds.\n\n", duration);
 
 }
 
