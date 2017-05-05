@@ -72,11 +72,6 @@ void Camera::Render(Scene &s){
             //Accumulated Color.
             Color accumCol = Color::BLACK;
             
-            //Testing
-            X_Samples = 10; Y_Samples = 10;
-            Jitter = true;
-            Shirley = false;
-            
             //SuperSample. For each super sample...
             for (int i = 0; i < X_Samples; i++){
                 for (int j = 0; j < Y_Samples; j++){
@@ -121,7 +116,6 @@ void Camera::Render(Scene &s){
                     //Get the center x and y coordinates.
                     float fx = ((float(sample_x) + 0.5f) / float(XRes)) - 0.5f;
                     float fy = ((float(sample_y) + 0.5f) / float(YRes)) - 0.5f;
-
                     
                     //Create the ray.
                     Ray camera_ray;
