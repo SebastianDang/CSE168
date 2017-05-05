@@ -7,10 +7,13 @@
 //
 
 #include "RayTrace.h"
+#include "Material.h"
+#include "LambertMaterial.h"
+#include "MetalMaterial.h"
 
 RayTrace::RayTrace(Scene &s){
     Scn = &s;
-    MaxDepth = 3;
+    MaxDepth = 5;
 }
 
 bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
@@ -61,6 +64,11 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
                 continue;
             }
         }
+        
+        //Add in reflectance intensity to the shadows.
+        if (hit.Mtl != NULL) {
+            hit.Mtl->ComputeReflectance(col, -ray.Direction, toLight, hit);
+        }
 
         //Add contribution to hit.Shade.
         col.Scale(shadow * intensity);
@@ -69,25 +77,28 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
     
     if(depth == MaxDepth) return true;
     
-    return true;//Avoid for now.
-    
     //Compute shade due to reflections/refractions
-    for (int i = 0; i < SecondaryRays; i++){
+    if (hit.Mtl != NULL){
         
-        //Generate newRay and newHit.
+        //Generate newRay & newHit.
         Ray newRay;
+        newRay.Origin = hit.Position;
         Intersection newHit;
         
-        //Compute ray intensity (based on fR or fT) TODO: Slide 3 p43
-        float intensity = 0.001f;//Material?
+        //Create color from reflection/refraction.
+        Color outColor;
+        
+        //Compute ray intensity (based on fR or fT).
+        hit.Mtl->GenerateSample(outColor, -ray.Direction, newRay.Direction, hit);
         
         //Recursive TraceRay.
-        TraceRay(newRay, newHit);
+        TraceRay(newRay, newHit, depth + 1);
         
-        newHit.Shade.Scale(intensity);
+        //hit.Shade += intensity * newhit.Shade
+        newHit.Shade.Multiply(outColor);
+        
         hit.Shade.Add(newHit.Shade);
     }
-    
     
     return true;
 }

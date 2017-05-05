@@ -3,6 +3,7 @@
 ////////////////////////////////////////
 
 #include "LambertMaterial.h"
+#include "MetalMaterial.h"
 #include "MeshObject.h"
 #include "BoxTreeObject.h"
 #include "InstanceObject.h"
@@ -23,7 +24,7 @@ void test();
 ////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc,char **argv) {
-    project1();
+    project3();
     //test();
 	return 0;
 }
@@ -141,7 +142,7 @@ void project2(){
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/*
+
 void project3() {
     // Create scene
     Scene scn;
@@ -157,7 +158,7 @@ void project3() {
     
     // Load dragon mesh
     MeshObject dragon;
-    dragon.LoadPLY("dragon.ply");
+    dragon.LoadPLY("Assets/dragon.ply");
     
     // Create box tree
     BoxTreeObject tree;
@@ -182,7 +183,7 @@ void project3() {
         InstanceObject *inst=new InstanceObject(tree);
         mtx[3]=glm::vec4(0.0f,0.0f,0.3f*(float(i)/float(numDragons-1)-0.5f),1.0f);
         inst->SetMatrix(mtx);
-        //inst->SetMaterial(mtl[i]);
+        inst->SetMaterial(*mtl[i]);
         scn.AddObject(*inst);
     }
     
@@ -200,7 +201,7 @@ void project3() {
     cam.SetAspect(1.33f);
     cam.LookAt(glm::vec3(-0.5f,0.25f,-0.2f),glm::vec3(0.0f,0.15f,0.0f), glm::vec3(0,1,0));
     cam.SetFOV(40.0f);
-    cam.SetSuperSample(10,10);
+    cam.SetSuperSample(2,2);
     cam.SetJitter(true);
     cam.SetShirley(true);
     
@@ -208,7 +209,7 @@ void project3() {
     cam.Render(scn);
     cam.SaveBitmap("PA3/project3.bmp");
 }
-*/
+
 
 ////////////////////////////////////////////////////////////////////////////////
 

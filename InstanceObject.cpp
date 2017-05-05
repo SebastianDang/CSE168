@@ -15,6 +15,7 @@ InstanceObject::InstanceObject(){
     Inverse = glm::inverse(Matrix);
     //Set Child.
     Child = NULL;
+    Material = NULL;
 }
 
 //Constructor that takes in a pointer to an object.
@@ -47,6 +48,7 @@ bool InstanceObject::Intersect(const Ray &ray,Intersection &hit){
     hit.Position = glm::vec3(Matrix * glm::vec4(hit.Position, 1.0f));
     hit.Normal = glm::vec3(Matrix * glm::vec4(hit.Normal, 0.0f));
     hit.HitDistance = glm::distance(ray.Origin, hit.Position); //Correct for any scaling.
+    if (Material != NULL) { hit.Mtl= Material; }
     return true;
 }
 
