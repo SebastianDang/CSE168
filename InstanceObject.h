@@ -26,6 +26,8 @@ public:
     
     void SetChild(Object &obj) { Child = &obj; }
     
+    void SetMaterial(Material &mat) { Material = &mat; }
+    
     bool Intersect(const Ray &ray,Intersection &hit);
     
 private:
@@ -34,6 +36,7 @@ private:
     glm::mat4x4 Inverse; //Pre-computed inverse of Matrix.
     
     Object *Child; //Pointer to child.
+    Material *Material;
     
 };
 #endif /* InstanceObject_h */

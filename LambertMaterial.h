@@ -16,7 +16,14 @@ public:
 	}
     
     void GenerateSample(Color &col, const glm::vec3 &in, glm::vec3 &out, const Intersection &hit) {
-    
+        
+        col = DiffuseColor;
+        
+        
+        
+        
+        
+        
     }
     
     void setDiffuse(Color diffuseCol){ DiffuseColor = diffuseCol; }

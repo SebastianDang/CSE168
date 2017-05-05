@@ -17,7 +17,9 @@ public:
 
 	bool Intersect(const Ray &ray, Intersection &hit) const;
     
-    Vertex &GetVtx(int index) {return *Vtx[index];}
+    Vertex &GetVtx(int index) { return *Vtx[index]; }
+    
+    Material &GetMtl() { return *Mtl; }
     
     glm::vec3 GetCenter();
 

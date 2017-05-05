@@ -65,6 +65,11 @@ bool Triangle::Intersect(const Ray &ray, Intersection &hit) const{
     //Triangle Texture Coordinates. TODO: Slide 2, p62.
     //u = ((1-alpha-beta) * u_a) + (alpha * u_b) + (beta * u_c)
     //v = ((1-alpha-beta) * v_a) + (alpha * v_b) + (beta * v_c)
+    
+    //Set the hit material.
+    if (this->Mtl != NULL){
+        hit.Mtl = Mtl;
+    }
 
     return true;
 }
