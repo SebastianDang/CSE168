@@ -13,8 +13,8 @@ class LambertMaterial:public Material {
 public:
     
 	void ComputeReflectance(Color &col, const glm::vec3 &in, const glm::vec3 &out, const Intersection &hit) {
-//		float pi=3.1415926f;
-//		col.Scale(DiffuseColor,1.0f/pi);//Original Color.
+        
+        //Color is constant all around.
         col = DiffuseColor;
 	}
     
@@ -49,12 +49,12 @@ public:
         }
         
         //Calculate x and z.
-        glm::vec3 x = glm::cross(h, y);
-        glm::vec3 z = glm::cross(x, y);
+        glm::vec3 x = glm::normalize(glm::cross(h, y));
+        glm::vec3 z = glm::normalize(glm::cross(x, y));
         
         //Return the new direction.
         out = point.x * x + point.y * y + point.z * z;
-        //out = glm::dot(point, hit.Normal) * in;//Old
+        out = glm::normalize(out);
         
         //Constant color.
         col = DiffuseColor;

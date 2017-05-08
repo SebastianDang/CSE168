@@ -17,7 +17,17 @@ class MetalMaterial: public Material {
 public:
     
     void ComputeReflectance(Color &col, const glm::vec3 &in, const glm::vec3 &out, const Intersection &hit) {
-        col = DiffuseColor;
+        //Calculate perfect specular reflection.
+        glm::vec3 specular = (glm::dot(in, hit.Normal) * hit.Normal) - (2.0f * in);
+        float brdf = 1.0f;
+        
+        //BRDF is 0 everywhere except in the direction of perfect specular.
+        if (specular.x != out.x && specular.y != out.y && specular.z != out.z){
+            brdf = 0.0f;
+        }
+        
+        //Return the color.
+        col.Scale(DiffuseColor, brdf);
     }
     
     void GenerateSample(Color &col, const glm::vec3 &in, glm::vec3 &out, const Intersection &hit) {
