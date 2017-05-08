@@ -18,7 +18,7 @@ RayTrace::RayTrace(Scene &s){
 
 bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
     
-    //Find the ray intersection
+    //If no surface is hit, we just use the sky color.
     if(Scn->Intersect(ray,hit)==false) {
         hit.Shade=Scn->GetSkyColor();//Set to sky color.
         return false;
@@ -65,7 +65,7 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
             }
         }
         
-        //Add in reflectance intensity to the shadows.
+        //Add in reflectance intensity (indirect illumination).
         if (hit.Mtl != NULL) {
             hit.Mtl->ComputeReflectance(col, -ray.Direction, toLight, hit);
         }
@@ -94,7 +94,6 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
         //Recursive TraceRay.
         TraceRay(newRay, newHit, depth + 1);
         
-        //hit.Shade += intensity * newhit.Shade
         newHit.Shade.Multiply(outColor);
         
         hit.Shade.Add(newHit.Shade);

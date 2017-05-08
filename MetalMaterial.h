@@ -17,30 +17,29 @@ class MetalMaterial: public Material {
 public:
     
     void ComputeReflectance(Color &col, const glm::vec3 &in, const glm::vec3 &out, const Intersection &hit) {
-        float pi=3.1415926f;
-        col.Scale(DiffuseColor,1.0f/pi);
+        col = DiffuseColor;
     }
     
     void GenerateSample(Color &col, const glm::vec3 &in, glm::vec3 &out, const Intersection &hit) {
         
-        //Generate random points s and t. (Both kept in ranges 0 and 1).
-        float s = ((rand()%100) / 100.0f);
-        float t = ((rand()%100) / 100.0f);
+        glm::vec3 reflection = (2 * glm::dot(hit.Normal, in) * hit.Normal) - in;
+        out = reflection;
         
-        //Cosine Weighted Hemisphere
-        float u = 2 * M_PI * s;
-        float v = sqrtf(1-t);
+        //Calculate the reflected color. (Fresnel Metal)
+        float nt = 0.617, kt = 2.63;
+        float nd = glm::dot(hit.Normal, in);
+
+        float rpar_num = ((powf(nt,2) + powf(kt,2)) * powf(nd, 2)) - (2 * nt * nd) + 1;
+        float rpar_denum = ((powf(nt,2) + powf(kt,2)) * powf(nd, 2)) + (2 * nt * nd) + 1;
         
-        glm::vec3 point;
-        point.x = v * cosf(u);
-        point.y = sqrtf(t);
-        point.z = v * sinf(u);
+        float rperp_num = (powf(nt,2) + powf(kt,2)) + powf(nd, 2) - (2 * nt * nd);
+        float rperp_denum = (powf(nt,2) + powf(kt,2)) + powf(nd, 2) + (2 * nt * nd);
         
-        //Return the cosine weighted vector in the direction around the normal.
-        out = glm::dot(point, hit.Normal) * in;
+        float fresnel = ((rpar_num / rpar_denum) + (rperp_num / rperp_denum)) / 2;
         
-        //Return the color.
-        col = DiffuseColor;
+        fresnel = 1;//Testing
+        
+        col.Scale(DiffuseColor, fresnel);
     }
     
     void setDiffuse(Color diffuseCol){ DiffuseColor = diffuseCol; }
