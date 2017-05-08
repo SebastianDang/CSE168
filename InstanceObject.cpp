@@ -36,6 +36,7 @@ bool InstanceObject::Intersect(const Ray &ray,Intersection &hit){
     
     //Create ray2 from ray.
     Ray ray2;
+    hit.HitDistance += 0.002f;
     
     //Use the inverse to transform the ray into object space.
     ray2.Origin = glm::vec3(Inverse * glm::vec4(ray.Origin, 1.0f));
