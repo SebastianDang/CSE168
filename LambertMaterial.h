@@ -15,7 +15,7 @@ public:
 	void ComputeReflectance(Color &col, const glm::vec3 &in, const glm::vec3 &out, const Intersection &hit) {
         
         //Color is constant all around.
-        col = DiffuseColor;
+        col.Scale(DiffuseColor, 1.0f);
 	}
     
     void GenerateSample(Color &col, const glm::vec3 &in, glm::vec3 &out, const Intersection &hit) {
@@ -58,7 +58,6 @@ public:
         
         //Constant color.
         col = DiffuseColor;
-
     }
     
     void setDiffuse(Color diffuseCol){ DiffuseColor = diffuseCol; }

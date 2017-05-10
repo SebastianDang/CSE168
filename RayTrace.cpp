@@ -13,7 +13,7 @@
 
 RayTrace::RayTrace(Scene &s){
     Scn = &s;
-    MaxDepth = 5;
+    MaxDepth = 10;
 }
 
 bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
@@ -69,9 +69,11 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
         if (hit.Mtl != NULL) {
             hit.Mtl->ComputeReflectance(col, -ray.Direction, toLight, hit);
         }
-
-        //Add contribution to hit.Shade.
+        
+        //Add in the shadow.
         col.Scale(shadow * intensity);
+        
+        //Add contribution to hit.Shade.
         hit.Shade.Add(col);
     }
     
