@@ -201,12 +201,27 @@ void project3() {
     cam.SetAspect(1.33f);
     cam.LookAt(glm::vec3(-0.5f,0.25f,-0.2f),glm::vec3(0.0f,0.15f,0.0f), glm::vec3(0,1,0));
     cam.SetFOV(40.0f);
-    cam.SetSuperSample(2,2);
+    cam.SetSuperSample(10,10);
     cam.SetJitter(true);
     cam.SetShirley(true);
     
+    struct timespec start, finish;
+    double elapsed;
+    
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    printf("Start Render\n");
+
     // Render image
     cam.Render(scn);
+    
+    clock_gettime(CLOCK_MONOTONIC, &finish);
+    printf("Finish Render\n");
+    
+    elapsed = (finish.tv_sec - start.tv_sec);
+    elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
+    printf("elapsed: %f\n", elapsed);
+    
+    //Save
     cam.SaveBitmap("PA3/project3.bmp");
 }
 

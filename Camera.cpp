@@ -6,6 +6,8 @@
 //  Copyright © 2017 Sebastian Dang. All rights reserved.
 //
 
+#include <future>
+#include <thread>
 #include "Camera.h"
 #include "Ray.h"
 #include "RayTrace.h"
@@ -42,15 +44,7 @@ void Camera::LookAt(const glm::vec3 &pos, const glm::vec3 &target, const glm::ve
 
 //Render the scene onto the Bitmap.
 void Camera::Render(Scene &s){
-    
-    //Start time.
-    clock_t start = clock();
-    long double start_time = start / (double) CLOCKS_PER_SEC;
-    printf("Render Start Time: %Lf\n", start_time);
-    
-    //Variables.
-    int x,y;
-    
+
     //Camera vectors.
     glm::vec3 a = glm::vec3(WorldMatrix[0]);
     glm::vec3 b = glm::vec3(WorldMatrix[1]);
@@ -65,93 +59,97 @@ void Camera::Render(Scene &s){
     float scaleX = 2 * tan(hfov/2);
     float scaleY = 2 * tan(vfov/2);
     
-    //Loop through each pixel.
-    for (y = 0; y < YRes; y++){
-        for (x = 0; x < XRes; x++){
-            
-            //Accumulated Color.
-            Color accumCol = Color::BLACK;
-            
-            //SuperSample. For each super sample...
-            for (int i = 0; i < X_Samples; i++){
-                for (int j = 0; j < Y_Samples; j++){
-                    
-                    //Compute subpixel position (0...1 range in x & y).
-                    float sub_x = float(i) / float(X_Samples);
-                    float sub_y = float(j) / float(Y_Samples);
-                    
-                    //Apply Shirley to subpixel position.
-                    if (Shirley){
-                        //X
-                        if (sub_x < 0.5){
-                            sub_x = -0.5 + sqrtf(2*sub_x);
-                        }
-                        else if (sub_x >= 0.5){
-                            sub_x = 1.5 - sqrtf(2 - 2*sub_x);
-                        }
-                        //Y
-                        if (sub_y < 0.5){
-                            sub_y = -0.5 + sqrtf(2*sub_y);
-                        }
-                        else if (sub_y >= 0.5){
-                            sub_y = 1.5 - sqrtf(2 - 2*sub_y);
-                        }
-                    }
-
-                    //Apply Jitter to subpixel position.
-                    if (Jitter){
-                        //Get jitter vals.
-                        float jitter_x = (((rand()%200) - 100) / 100.0f) / X_Samples;
-                        float jitter_y = (((rand()%200) - 100) / 100.0f) / Y_Samples;
+    //Multi-threading.
+    std::size_t max = YRes * XRes;
+    std::size_t cores = std::thread::hardware_concurrency();
+    std::vector<std::future<void>> future_vector;
+    
+    for (std::size_t i(0); i < cores; ++i){
+        future_vector.emplace_back(std::async([=, &s](){
+            for (std::size_t index(i); index < max; index += cores){
+                
+                //Recalculate x and y.
+                std::size_t x = index % XRes;
+                std::size_t y = index / XRes;
+                
+                //----- Perform Rendering here -----//
+                
+                //Accumulated Color.
+                Color accumCol = Color::BLACK;
+                
+                //SuperSample. For each super sample...
+                for (int i = 0; i < X_Samples; i++){
+                    for (int j = 0; j < Y_Samples; j++){
                         
-                        //Apply.
-                        sub_x += jitter_x;
-                        sub_y += jitter_y;
+                        //Compute subpixel position (0...1 range in x & y).
+                        float sub_x = float(i) / float(X_Samples);
+                        float sub_y = float(j) / float(Y_Samples);
+                        
+                        //Apply Shirley to subpixel position.
+                        if (Shirley){
+                            //X
+                            if (sub_x < 0.5){
+                                sub_x = -0.5 + sqrtf(2*sub_x);
+                            }
+                            else if (sub_x >= 0.5){
+                                sub_x = 1.5 - sqrtf(2 - 2*sub_x);
+                            }
+                            //Y
+                            if (sub_y < 0.5){
+                                sub_y = -0.5 + sqrtf(2*sub_y);
+                            }
+                            else if (sub_y >= 0.5){
+                                sub_y = 1.5 - sqrtf(2 - 2*sub_y);
+                            }
+                        }
+                        
+                        //Apply Jitter to subpixel position.
+                        if (Jitter){
+                            //Get jitter vals.
+                            float jitter_x = (((rand()%200) - 100) / 100.0f) / X_Samples;
+                            float jitter_y = (((rand()%200) - 100) / 100.0f) / Y_Samples;
+                            
+                            //Apply.
+                            sub_x += jitter_x;
+                            sub_y += jitter_y;
+                        }
+                        
+                        //Turn the subpixel position into pixel position & trace path.
+                        float sample_x = x + sub_x;
+                        float sample_y = y + sub_y;
+                        
+                        //Get the center x and y coordinates.
+                        float fx = ((float(sample_x) + 0.5f) / float(XRes)) - 0.5f;
+                        float fy = ((float(sample_y) + 0.5f) / float(YRes)) - 0.5f;
+                        
+                        //Create the ray.
+                        Ray camera_ray;
+                        camera_ray.Origin = glm::vec3(d);
+                        camera_ray.Direction = glm::normalize( (fx * scaleX * a) + (fy * scaleY * b) - c);
+                        
+                        //Check if the camera ray intersects with any objects in the scene.
+                        Intersection hit;
+                        
+                        //Calculate color.
+                        RayTrace raytrace = RayTrace(s);
+                        raytrace.TraceRay(camera_ray, hit, 1);
+                        
+                        //Add to accumulation.
+                        accumCol.Add(hit.Shade);
                     }
-                    
-                    //Turn the subpixel position into pixel position & trace path.
-                    float sample_x = x + sub_x;
-                    float sample_y = y + sub_y;
-                    
-                    //Get the center x and y coordinates.
-                    float fx = ((float(sample_x) + 0.5f) / float(XRes)) - 0.5f;
-                    float fy = ((float(sample_y) + 0.5f) / float(YRes)) - 0.5f;
-                    
-                    //Create the ray.
-                    Ray camera_ray;
-                    camera_ray.Origin = glm::vec3(d);
-                    camera_ray.Direction = glm::normalize( (fx * scaleX * a) + (fy * scaleY * b) - c);
-                    
-                    //Check if the camera ray intersects with any objects in the scene.
-                    Intersection hit;
-
-                    //Calculate color.
-                    RayTrace raytrace = RayTrace(s);
-                    raytrace.TraceRay(camera_ray, hit, 1);
-                    
-                    //Add to accumulation.
-                    accumCol.Add(hit.Shade);
                 }
+                
+                //Scale from the super sample.
+                float scale = float(1)/(X_Samples * Y_Samples);
+                accumCol.Scale(scale);
+                
+                //Set the pixel.
+                BMP.SetPixel((int)x, (int)y, accumCol.ToInt());
+                
+                //----- End Rendering here -----//
             }
-            
-            //Scale from the super sample.
-            float scale = float(1)/(X_Samples * Y_Samples);
-            accumCol.Scale(scale);
-
-            //Set the pixel.
-            BMP.SetPixel(x, y, accumCol.ToInt());
-            
-        }
+        }));
     }
-    
-    //End time.
-    clock_t end = clock();
-    long double end_time = end / (double) CLOCKS_PER_SEC;
-    printf("Render End Time: %Lf\n", end_time);
-    
-    //Calculate duration.
-    long double duration = end_time - start_time;
-    printf("Time Elapsed: %Lf seconds.\n\n", duration);
 
 }
 
