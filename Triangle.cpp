@@ -65,6 +65,11 @@ bool Triangle::Intersect(const Ray &ray, Intersection &hit) const{
     //Triangle Texture Coordinates. TODO: Slide 2, p62.
     //u = ((1-alpha-beta) * u_a) + (alpha * u_b) + (beta * u_c)
     //v = ((1-alpha-beta) * v_a) + (alpha * v_b) + (beta * v_c)
+    hit.TangentU = glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), hit.Normal);
+    if(glm::length(hit.TangentU) < 0.0001f)
+        hit.TangentU = glm::cross(glm::vec3(1.0f, 0.0f, 0.0f), hit.Normal);
+    hit.TangentU = glm::normalize(hit.TangentU);
+    
     
     //Set the hit material.
     if (this->Mtl != NULL){

@@ -20,6 +20,9 @@ public:
 	glm::vec3 Position;
 	glm::vec3 Normal;
 	Material *Mtl;
+    
+    // Texture Coords 
+    glm::vec3 TangentU, TangentV;
 
 	// Shaded color
 	Color Shade;
