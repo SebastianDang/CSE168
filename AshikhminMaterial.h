@@ -75,7 +75,7 @@ public:
         if (random < SpecularLevel){
             
             //Calculate the direction.
-            CalculateSpecularSample(in, out, hit);
+            CalculateSpecularDirection(in, out, hit);
             
             //Set the color.
             if (glm::dot(out, hit.Normal) < 0.0f) {
@@ -89,7 +89,7 @@ public:
         else {
             
             //Calculate the direction.
-            CalculateDiffuseSample(in, out, hit);
+            CalculateDiffuseDirection(in, out, hit);
             
             //Set the color.
             col = DiffuseColor;
@@ -98,7 +98,7 @@ public:
     }
     
     //Only sets out.
-    void CalculateSpecularSample(const glm::vec3 &in, glm::vec3 &out, const Intersection &hit){
+    void CalculateSpecularDirection(const glm::vec3 &in, glm::vec3 &out, const Intersection &hit){
         
         //Given 2 random numbers (Both kept in ranges 0 and 1)
         float rand_1 = ((rand()%100) / 100.0f);
@@ -116,6 +116,12 @@ public:
         
         //Calculate k2 using h (Equation 7)
         glm::vec3 h = (hit.Normal * cos_theta) + (hit.TangentU * sin_theta * cos_phi) + (hit.TangentV * sin_theta * sin_phi);
+        
+        //randomize
+        float rand_3 = ((rand()%100) / 100.0f);
+        if (rand_3 < 0.5) h.x *= -1.0f;
+        if ((0.0 <= rand_3 && rand_3 <= 0.25) || (0.5 <= rand_3 && rand_3 <= 0.75)) h.z *= -1.0f;
+
         glm::vec3 k2 = (2 * glm::dot(h, in) * h) - in;
         
         //Calculate ph (Equation 6)
@@ -132,7 +138,7 @@ public:
     }
     
     //Only sets out.
-    void CalculateDiffuseSample(const glm::vec3 &in, glm::vec3 &out, const Intersection &hit){
+    void CalculateDiffuseDirection(const glm::vec3 &in, glm::vec3 &out, const Intersection &hit){
         
         //Generate random points s and t. (Both kept in ranges 0 and 1).
         float s = ((rand()%100) / 100.0f);
