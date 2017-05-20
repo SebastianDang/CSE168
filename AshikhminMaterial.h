@@ -19,7 +19,7 @@ public:
     void ComputeReflectance(Color &col, const glm::vec3 &in, const glm::vec3 &out, const Intersection &hit) {
         
         //----- Compute Diffuse (pd) -----//
-        float pd_factor = ((28.0f * DiffuseLevel) / (23.0f * M_PI)) * (1.0f - SpecularLevel);
+        float pd_factor = ((28.0f * DiffuseLevel) / (10.0f * M_PI)) * (1.0f - SpecularLevel);
         float diffuse_k1 = 1.0f - powf((1.0f - (glm::dot(hit.Normal, in) / 2.0f)), 5);
         float diffuse_k2 = 1.0f - powf((1.0f - (glm::dot(hit.Normal, out) / 2.0f)), 5);
         
@@ -68,9 +68,107 @@ public:
     }
     
     void GenerateSample(Color &col, const glm::vec3 &in, glm::vec3 &out, const Intersection &hit) {
-        glm::vec3 incidence = in;
-        glm::vec3 reflection = (2 * glm::dot(hit.Normal, incidence) * hit.Normal) - incidence;
-        out = reflection;
+
+        float random = ((rand()%100) / 100.0f);
+        
+        //We do specular component.
+        if (random < SpecularLevel){
+            
+            //Calculate the direction.
+            CalculateSpecularSample(in, out, hit);
+            
+            //Set the color.
+            if (glm::dot(out, hit.Normal) < 0.0f) {
+                col = SpecularColor;
+            }
+            else {
+                col = SpecularColor;
+            }
+        }
+        //We do diffuse component.
+        else {
+            
+            //Calculate the direction.
+            CalculateDiffuseSample(in, out, hit);
+            
+            //Set the color.
+            col = DiffuseColor;
+        }
+       
+    }
+    
+    //Only sets out.
+    void CalculateSpecularSample(const glm::vec3 &in, glm::vec3 &out, const Intersection &hit){
+        
+        //Given 2 random numbers (Both kept in ranges 0 and 1)
+        float rand_1 = ((rand()%100) / 100.0f);
+        float rand_2 = ((rand()%100) / 100.0f);
+        
+        //Calculate cos/sin of phi (Equation 9)
+        float phi = atan(sqrtf((RoughnessU + 1.0f) / (RoughnessV + 1.0f)) * tan((M_PI * rand_1) / 2.0f));
+        float cos_phi = cos(phi);
+        float sin_phi = sin(phi);
+        
+        //Calculate cos/sin of theta (Equation 10)
+        float cos_exp = 1.0f / (RoughnessU * powf(cos(phi), 2) + RoughnessV * powf(sin(phi), 2) + 1);
+        float cos_theta = powf((1.0f - rand_2), cos_exp);
+        float sin_theta = sqrt(1.0f - cos_theta*cos_theta);//Pythagorean
+        
+        //Calculate k2 using h (Equation 7)
+        glm::vec3 h = (hit.Normal * cos_theta) + (hit.TangentU * sin_theta * cos_phi) + (hit.TangentV * sin_theta * sin_phi);
+        glm::vec3 k2 = (2 * glm::dot(h, in) * h) - in;
+        
+        //Calculate ph (Equation 6)
+        float h_factor = sqrtf((RoughnessU + 1.0f) * (RoughnessV + 1.0f)) / (2 * M_PI);
+        float nh = glm::dot(hit.Normal, h);
+        float h_exp = (RoughnessU * powf(cos(phi), 2)) + (RoughnessV * powf(sin(phi), 2));
+        float p_h = h_factor * powf(nh, h_exp);
+        
+        //Calculate pk (Equation 8)
+        float p_k2 = p_h / (4 * glm::dot(in, h));
+        
+        out = k2;
+        
+    }
+    
+    //Only sets out.
+    void CalculateDiffuseSample(const glm::vec3 &in, glm::vec3 &out, const Intersection &hit){
+        
+        //Generate random points s and t. (Both kept in ranges 0 and 1).
+        float s = ((rand()%100) / 100.0f);
+        float t = ((rand()%100) / 100.0f);
+        
+        //Cosine Weighted Hemisphere
+        float u = 2 * M_PI * s;
+        float v = sqrtf(1-t);
+        
+        glm::vec3 point;
+        point.x = v * cosf(u);
+        point.y = sqrtf(t);
+        point.z = v * sinf(u);
+        
+        //Return the cosine weighted vector in the direction around the normal.
+        glm::vec3 y = glm::vec3(hit.Normal);
+        
+        //Calculate h.
+        glm::vec3 h = y;
+        if (fabsf(h.x) <= fabsf(h.y) && fabsf(h.x) <= fabsf(h.z)){
+            h.x = 1.0f;
+        }
+        else if (fabsf(h.y) <= fabsf(h.x) && fabsf(h.y) <= fabsf(h.z)){
+            h.y = 1.0f;
+        }
+        else{
+            h.z = 1.0f;
+        }
+        
+        //Calculate x and z.
+        glm::vec3 x = glm::normalize(glm::cross(h, y));
+        glm::vec3 z = glm::normalize(glm::cross(x, y));
+        
+        //Return the new direction.
+        out = point.x * x + point.y * y + point.z * z;
+        out = glm::normalize(out);
         
     }
     
