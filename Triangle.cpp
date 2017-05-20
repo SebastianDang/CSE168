@@ -69,7 +69,7 @@ bool Triangle::Intersect(const Ray &ray, Intersection &hit) const{
     if(glm::length(hit.TangentU) < 0.0001f)
         hit.TangentU = glm::cross(glm::vec3(1.0f, 0.0f, 0.0f), hit.Normal);
     hit.TangentU = glm::normalize(hit.TangentU);
-    
+    hit.TangentV = glm::cross(hit.Normal, hit.TangentU);
     
     //Set the hit material.
     if (this->Mtl != NULL){
