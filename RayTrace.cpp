@@ -79,6 +79,8 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
     
     if(depth == MaxDepth) return true;
     
+    return true;
+    
     //Compute shade due to reflections/refractions
     if (hit.Mtl != NULL){
         

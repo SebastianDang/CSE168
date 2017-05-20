@@ -18,54 +18,72 @@ public:
     
     void ComputeReflectance(Color &col, const glm::vec3 &in, const glm::vec3 &out, const Intersection &hit) {
         
-        //Calculate perfect specular reflection.
-        glm::vec3 specular = (glm::dot(in, hit.Normal) * hit.Normal) - (2.0f * in);
-        float brdf = 1.0f;
+        //Compute Diffuse (pd)
+        float pd_factor = ((28.0f * DiffuseLevel) / (23.0f * M_PI)) * (1 - SpecularLevel);
+        float diffuse_k1 = 1.0f - powf((1 - (glm::dot(hit.Normal, in) / 2.0f)), 5);
+        float diffuse_k2 = 1.0f - powf((1 - (glm::dot(hit.Normal, out) / 2.0f)), 5);
         
-        //BRDF is 0 everywhere except in the direction of perfect specular.
-        if (specular.x != out.x && specular.y != out.y && specular.z != out.z){
-            brdf = 0.0f;
-        }
+        float pd = pd_factor * diffuse_k1 * diffuse_k2;
         
-        //Color is constant all around.
-        col.Scale(DiffuseColor, brdf);
+        //Compute Specular Component (ps)
+        glm::vec3 h = glm::normalize(in + out);
+        float hu = glm::dot(h, hit.TangentU);
+        float hv = glm::dot(h, hit.TangentV);
+        float hn = glm::dot(h, hit.Normal);
+        
+        float ps_factor = sqrtf((RoughnessU + 1.0f) * (RoughnessV + 1.0f)) / (8.0f * M_PI);
+        
+        float ps_num = (glm::dot(hit.Normal, h));
+        float ps_exp = ((RoughnessU * powf(hu, 2)) + (RoughnessV * powf(hv, 2))) / (1.0f - powf(hn, 2));
+        
+        float ps_den = glm::dot(h, in) * fmaxf(glm::dot(hit.Normal, in), glm::dot(hit.Normal, out));
+        
+        float fresnel = SpecularLevel + ((1.0f - SpecularLevel) * powf((1.0f - glm::dot(h, in)), 5));
+        
+        float ps = ps_factor * (powf(ps_num, ps_exp) / ps_den) * fresnel;
+        
+        //Combine colors
+        Color diffuseFactor = DiffuseColor;
+        Color specularFactor = SpecularColor;
+        
+        diffuseFactor.Scale(pd);
+        specularFactor.Scale(ps);
+        
+        Color result = Color::BLACK;
+        result.Add(diffuseFactor);
+        result.Add(specularFactor);
+        
+        col.Multiply(result);
     }
     
     void GenerateSample(Color &col, const glm::vec3 &in, glm::vec3 &out, const Intersection &hit) {
-        
         glm::vec3 incidence = in;
         glm::vec3 reflection = (2 * glm::dot(hit.Normal, incidence) * hit.Normal) - incidence;
         out = reflection;
-        
-        //Calculate the reflected color. (Fresnel Metal)
-        float nt = 0.617, kt = 2.63;
-        float nd = glm::dot(hit.Normal, in);
-        
-        float rpar_num = ((powf(nt,2) + powf(kt,2)) * powf(nd, 2)) - (2 * nt * nd) + 1;
-        float rpar_denum = ((powf(nt,2) + powf(kt,2)) * powf(nd, 2)) + (2 * nt * nd) + 1;
-        
-        float rperp_num = (powf(nt,2) + powf(kt,2)) + powf(nd, 2) - (2 * nt * nd);
-        float rperp_denum = (powf(nt,2) + powf(kt,2)) + powf(nd, 2) + (2 * nt * nd);
-        
-        float fresnel = ((rpar_num / rpar_denum) + (rperp_num / rperp_denum)) / 2;
-        
-        fresnel = 1.0f;//Testing
-        
-        col.Scale(DiffuseColor, fresnel);
+
     }
     
-    void SetRoughness(float f, float f2) { }
+    void SetDiffuse(Color diffuseCol){ DiffuseColor = diffuseCol; }
     
-    void SetSpecularLevel(float f) { }
+    void SetSpecular(Color diffuseCol){ SpecularColor = diffuseCol; }
     
-    void setSpecular(Color diffuseCol){ }
+    void SetDiffuseLevel(float f) { DiffuseLevel = f; }
     
-    void SetDiffuseLevel(float f) { }
+    void SetSpecularLevel(float f) { SpecularLevel = f; }
     
-    void setDiffuse(Color diffuseCol){ DiffuseColor = diffuseCol; }
+    void SetRoughness(float u, float v) { RoughnessU = u; RoughnessV = v; }
     
 private:
+    //Both colors.
     Color DiffuseColor;
+    Color SpecularColor;
+    
+    //Both levels for mixing.
+    float DiffuseLevel;
+    float SpecularLevel;
+    
+    //Roughness
+    float RoughnessU, RoughnessV;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

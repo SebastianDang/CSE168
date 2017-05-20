@@ -60,7 +60,7 @@ public:
         col = DiffuseColor;
     }
     
-    void setDiffuse(Color diffuseCol){ DiffuseColor = diffuseCol; }
+    void SetDiffuse(Color diffuseCol){ DiffuseColor = diffuseCol; }
 
 private:
 	Color DiffuseColor;

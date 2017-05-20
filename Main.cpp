@@ -151,7 +151,7 @@ void project3() {
     
     // Create ground
     LambertMaterial groundMtl;
-    groundMtl.setDiffuse(Color(0.25f,0.25f,0.25f));
+    groundMtl.SetDiffuse(Color(0.25f,0.25f,0.25f));
     
     MeshObject ground;
     ground.MakeBox(2.0f,0.11f,2.0f,&groundMtl);
@@ -167,13 +167,13 @@ void project3() {
     
     // Materials
     LambertMaterial white;
-    white.setDiffuse(Color(0.7f,0.7f,0.7f));
+    white.SetDiffuse(Color(0.7f,0.7f,0.7f));
     
     LambertMaterial red;
-    red.setDiffuse(Color(0.7f,0.1f,0.1f));
+    red.SetDiffuse(Color(0.7f,0.1f,0.1f));
     
     MetalMaterial metal;
-    metal.setDiffuse(Color(0.95f,0.64f,0.54f));
+    metal.SetDiffuse(Color(0.95f,0.64f,0.54f));
     
     const int numDragons=4;
     Material *mtl[numDragons]={&white,&metal,&red,&white};
@@ -236,7 +236,7 @@ void project4(){
     
     // Create ground
     LambertMaterial groundMtl;
-    groundMtl.setDiffuse(Color(0.3f,0.3f,0.35f));
+    groundMtl.SetDiffuse(Color(0.3f,0.3f,0.35f));
     
     MeshObject ground;
     ground.MakeBox(2.0f,0.11f,2.0f,&groundMtl);
@@ -257,22 +257,22 @@ void project4(){
     // Diffuse
     mtl[0].SetSpecularLevel(0.0f);
     mtl[0].SetDiffuseLevel(1.0f);
-    mtl[0].setDiffuse(Color(0.7f,0.7f,0.7f));
+    mtl[0].SetDiffuse(Color(0.7f,0.7f,0.7f));
     // Roughened copper
     mtl[1].SetDiffuseLevel(0.0f);
     mtl[1].SetSpecularLevel(1.0f);
-    mtl[1].setSpecular(Color(0.9f,0.6f,0.5f));
+    mtl[1].SetSpecular(Color(0.9f,0.6f,0.5f));
     mtl[1].SetRoughness(100.0f,100.0f);
     // Anisotropic gold
     mtl[2].SetDiffuseLevel(0.0f);
     mtl[2].SetSpecularLevel(1.0f);
-    mtl[2].setSpecular(Color(0.95f,0.7f,0.3f));
+    mtl[2].SetSpecular(Color(0.95f,0.7f,0.3f));
     mtl[2].SetRoughness(1.0f,1000.0f);
     // Red plastic
-    mtl[3].setDiffuse(Color(1.0f,0.1f,0.1f));
+    mtl[3].SetDiffuse(Color(1.0f,0.1f,0.1f));
     mtl[3].SetDiffuseLevel(0.8f);
     mtl[3].SetSpecularLevel(0.2f);
-    mtl[3].setSpecular(Color(1.0f,1.0f,1.0f));
+    mtl[3].SetSpecular(Color(1.0f,1.0f,1.0f));
     mtl[3].SetRoughness(1000.0f,1000.0f);
     
     // Create dragon instances
