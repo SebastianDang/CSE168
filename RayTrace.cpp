@@ -13,7 +13,7 @@
 
 RayTrace::RayTrace(Scene &s){
     Scn = &s;
-    MaxDepth = 10;
+    MaxDepth = 5;
 }
 
 bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){

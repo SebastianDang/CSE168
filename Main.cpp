@@ -298,7 +298,7 @@ void project4(){
     cam.SetAspect(1.33f);
     cam.LookAt(glm::vec3(-0.5f,0.25f,-0.2f), glm::vec3(0.0f,0.15f,-0.15f), glm::vec3(0,1,0));
     cam.SetFOV(40.0f);
-    cam.SetSuperSample(2,2);
+    cam.SetSuperSample(10,10);
     cam.SetJitter(true);
     cam.SetShirley(true);
     

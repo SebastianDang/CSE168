@@ -71,7 +71,7 @@ public:
 
         float random = ((rand()%100) / 100.0f);
         
-        //We do specular component.
+        //Specular component.
         if (random < SpecularLevel){
             
             //Calculate the direction.
@@ -79,20 +79,21 @@ public:
             
             //Set the color.
             if (glm::dot(out, hit.Normal) < 0.0f) {
-                col = SpecularColor;
+                //col = Color::BLACK;
+                col.Scale(SpecularColor, SpecularLevel);
             }
             else {
-                col = SpecularColor;
+                col.Scale(SpecularColor, SpecularLevel);
             }
         }
-        //We do diffuse component.
+        //Diffuse component.
         else {
             
             //Calculate the direction.
             CalculateDiffuseDirection(in, out, hit);
             
             //Set the color.
-            col = DiffuseColor;
+            col.Scale(DiffuseColor, 1.0f);
         }
        
     }
@@ -100,14 +101,26 @@ public:
     //Only sets out.
     void CalculateSpecularDirection(const glm::vec3 &in, glm::vec3 &out, const Intersection &hit){
         
-        //Given 2 random numbers (Both kept in ranges 0 and 1)
+        //Given random numbers (Kept in ranges 0 and 1)
         float rand_1 = ((rand()%100) / 100.0f);
         float rand_2 = ((rand()%100) / 100.0f);
+        float rand_3 = ((rand()%100) / 100.0f);
         
         //Calculate cos/sin of phi (Equation 9)
         float phi = atan(sqrtf((RoughnessU + 1.0f) / (RoughnessV + 1.0f)) * tan((M_PI * rand_1) / 2.0f));
         float cos_phi = cos(phi);
         float sin_phi = sin(phi);
+        
+        //Sample the entire hemisphere.
+        if (rand_3 > 0.75f) {
+            phi = 2.0f * M_PI - phi;
+        } else if (rand_3 > 0.5f) {
+            //phi = 2.0f * M_PI - (M_PI/2.0f) - phi;
+            phi = M_PI + phi;
+        } else if (rand_3 > 0.25f) {
+            //phi = 2.0f * M_PI - M_PI - phi;
+            phi = M_PI - phi;
+        }
         
         //Calculate cos/sin of theta (Equation 10)
         float cos_exp = 1.0f / (RoughnessU * powf(cos(phi), 2) + RoughnessV * powf(sin(phi), 2) + 1);
@@ -116,14 +129,11 @@ public:
         
         //Calculate k2 using h (Equation 7)
         glm::vec3 h = (hit.Normal * cos_theta) + (hit.TangentU * sin_theta * cos_phi) + (hit.TangentV * sin_theta * sin_phi);
-        
-        //randomize
-        float rand_3 = ((rand()%100) / 100.0f);
-        if (rand_3 < 0.5) h.x *= -1.0f;
-        if ((0.0 <= rand_3 && rand_3 <= 0.25) || (0.5 <= rand_3 && rand_3 <= 0.75)) h.z *= -1.0f;
-
         glm::vec3 k2 = (2 * glm::dot(h, in) * h) - in;
+        out = k2;
         
+        /*
+         
         //Calculate ph (Equation 6)
         float h_factor = sqrtf((RoughnessU + 1.0f) * (RoughnessV + 1.0f)) / (2 * M_PI);
         float nh = glm::dot(hit.Normal, h);
@@ -133,7 +143,7 @@ public:
         //Calculate pk (Equation 8)
         float p_k2 = p_h / (4 * glm::dot(in, h));
         
-        out = k2;
+        */
         
     }
     
@@ -153,27 +163,8 @@ public:
         point.y = sqrtf(t);
         point.z = v * sinf(u);
         
-        //Return the cosine weighted vector in the direction around the normal.
-        glm::vec3 y = glm::vec3(hit.Normal);
-        
-        //Calculate h.
-        glm::vec3 h = y;
-        if (fabsf(h.x) <= fabsf(h.y) && fabsf(h.x) <= fabsf(h.z)){
-            h.x = 1.0f;
-        }
-        else if (fabsf(h.y) <= fabsf(h.x) && fabsf(h.y) <= fabsf(h.z)){
-            h.y = 1.0f;
-        }
-        else{
-            h.z = 1.0f;
-        }
-        
-        //Calculate x and z.
-        glm::vec3 x = glm::normalize(glm::cross(h, y));
-        glm::vec3 z = glm::normalize(glm::cross(x, y));
-        
         //Return the new direction.
-        out = point.x * x + point.y * y + point.z * z;
+        out = point.x * hit.TangentU + point.y * hit.Normal + point.z * hit.TangentV;
         out = glm::normalize(out);
         
     }
