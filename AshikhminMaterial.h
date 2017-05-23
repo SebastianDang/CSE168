@@ -19,11 +19,11 @@ public:
     void ComputeReflectance(Color &col, const glm::vec3 &in, const glm::vec3 &out, const Intersection &hit) {
         
         //----- Compute Diffuse (pd) -----//
-        float pd_factor = ((28.0f * DiffuseLevel) / (10.0f * M_PI)) * (1.0f - SpecularLevel);
+        float pd_factor = ((28.0f * DiffuseLevel) / (23.0f * M_PI)) * (1.0f - SpecularLevel);
         float diffuse_k1 = 1.0f - powf((1.0f - (glm::dot(hit.Normal, in) / 2.0f)), 5);
         float diffuse_k2 = 1.0f - powf((1.0f - (glm::dot(hit.Normal, out) / 2.0f)), 5);
         
-        float pd = pd_factor * diffuse_k1 * diffuse_k2;
+        float pd = pd_factor * diffuse_k1 * diffuse_k2 * M_PI;
         
         //----- Compute Specular (ps) -----//
         
@@ -94,7 +94,7 @@ public:
             CalculateDiffuseDirection(in, out, hit);
             
             //Set the color.
-            col.Scale(DiffuseColor, DiffuseLevel);
+            col.Scale(DiffuseColor, 1.0f);
         }
        
     }
@@ -134,7 +134,8 @@ public:
         point.y = cos_phi * sin_theta;
         point.z = sin_phi * sin_theta;
         
-        glm::vec3 h = point.x * hit.TangentU + point.y * hit.Normal + point.z * hit.TangentV;
+        //glm::vec3 h = point.x * hit.TangentU + point.y * hit.Normal + point.z * hit.TangentV;
+        glm::vec3 h = (point.x * hit.Normal) + (point.y * hit.TangentU) + (point.z * hit.TangentV);
         glm::vec3 k2 = (2 * glm::dot(h, in) * h) - in;
         
         //Return the new direction.
