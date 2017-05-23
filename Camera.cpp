@@ -144,8 +144,8 @@ void Camera::Render(Scene &s){
                 accumCol.Scale(scale);
                 
                 //Set the pixel.
-                BMP.SetPixel((int)x, (int)y, GammaCorrection(accumCol, 1.8f));
-                //BMP.SetPixel((int)x, (int)y, accumCol.ToInt());
+                //BMP.SetPixel((int)x, (int)y, GammaCorrection(accumCol, 1.8f));
+                BMP.SetPixel((int)x, (int)y, accumCol.ToInt());
 
                 //----- End Rendering here -----//
             }

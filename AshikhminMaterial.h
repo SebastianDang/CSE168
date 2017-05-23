@@ -69,6 +69,7 @@ public:
     
     void GenerateSample(Color &col, const glm::vec3 &in, glm::vec3 &out, const Intersection &hit) {
 
+        //Random number chooses specular or diffuse.
         float random = ((rand()%100) / 100.0f);
         
         //Specular component.
@@ -93,7 +94,7 @@ public:
             CalculateDiffuseDirection(in, out, hit);
             
             //Set the color.
-            col.Scale(DiffuseColor, 1.0f);
+            col.Scale(DiffuseColor, DiffuseLevel);
         }
        
     }
@@ -128,23 +129,17 @@ public:
         float sin_theta = sqrt(1.0f - cos_theta*cos_theta);//Pythagorean
         
         //Calculate k2 using h (Equation 7)
-        glm::vec3 h = (hit.Normal * cos_theta) + (hit.TangentU * sin_theta * cos_phi) + (hit.TangentV * sin_theta * sin_phi);
+        glm::vec3 point;
+        point.x = cos_theta;
+        point.y = cos_phi * sin_theta;
+        point.z = sin_phi * sin_theta;
+        
+        glm::vec3 h = point.x * hit.TangentU + point.y * hit.Normal + point.z * hit.TangentV;
         glm::vec3 k2 = (2 * glm::dot(h, in) * h) - in;
-        out = k2;
         
-        /*
-         
-        //Calculate ph (Equation 6)
-        float h_factor = sqrtf((RoughnessU + 1.0f) * (RoughnessV + 1.0f)) / (2 * M_PI);
-        float nh = glm::dot(hit.Normal, h);
-        float h_exp = (RoughnessU * powf(cos(phi), 2)) + (RoughnessV * powf(sin(phi), 2));
-        float p_h = h_factor * powf(nh, h_exp);
-        
-        //Calculate pk (Equation 8)
-        float p_k2 = p_h / (4 * glm::dot(in, h));
-        
-        */
-        
+        //Return the new direction.
+        out = glm::normalize(k2);
+    
     }
     
     //Only sets out.
@@ -164,8 +159,8 @@ public:
         point.z = v * sinf(u);
         
         //Return the new direction.
-        out = point.x * hit.TangentU + point.y * hit.Normal + point.z * hit.TangentV;
-        out = glm::normalize(out);
+        glm::vec3 reflection = point.x * hit.TangentU + point.y * hit.Normal + point.z * hit.TangentV;
+        out = glm::normalize(reflection);
         
     }
     
