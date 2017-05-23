@@ -55,6 +55,9 @@ private:
     int X_Samples, Y_Samples;
     bool Jitter, Shirley;
     
+    //Gamma.
+    int GammaCorrection(Color sample, float gamma);
+    
 };
 
 #endif /* Camera_h */

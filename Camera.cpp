@@ -144,14 +144,36 @@ void Camera::Render(Scene &s){
                 accumCol.Scale(scale);
                 
                 //Set the pixel.
-                BMP.SetPixel((int)x, (int)y, accumCol.ToInt());
-                
+                BMP.SetPixel((int)x, (int)y, GammaCorrection(accumCol, 1.8f));
+                //BMP.SetPixel((int)x, (int)y, accumCol.ToInt());
+
                 //----- End Rendering here -----//
             }
         }));
     }
 
 }
+
+//Gamma.
+int Camera::GammaCorrection(Color sample, float gamma){
+    
+    Color gammaColor = sample;
+    
+    float r = sample.getRed();
+    float g = sample.getGreen();
+    float b = sample.getBlue();
+    
+    r = powf(r, 1.0f/gamma);
+    g = powf(g, 1.0f/gamma);
+    b = powf(b, 1.0f/gamma);
+
+    gammaColor.setRed(r);
+    gammaColor.setGreen(g);
+    gammaColor.setBlue(b);
+    
+    return gammaColor.ToInt();
+}
+
 
 //Set the super sample size.
 void Camera::SetSuperSample(int xsamples, int ysamples){
