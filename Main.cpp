@@ -6,6 +6,7 @@
 #include "MetalMaterial.h"
 #include "AshikhminMaterial.h"
 #include "MeshObject.h"
+#include "ProceduralObject.h"
 #include "BoxTreeObject.h"
 #include "InstanceObject.h"
 #include "Camera.h"
@@ -26,7 +27,7 @@ void test();
 ////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc,char **argv) {
-    project4();
+    test();
     return 0;
 }
 
@@ -333,29 +334,9 @@ void test(){
     scn.SetSkyColor(Color(0.8f, 0.9f, 1.0f));
     
     // Create boxes
-    MeshObject box1;
-    box1.MakeBox(5.0f,0.1f,5.0f);
-    BoxTreeObject tree1;
-    tree1.Construct(box1);
-    scn.AddObject(tree1);
-    
-    MeshObject box2;
-    box2.MakeBox(1.0f,1.0f,1.0f);
-    BoxTreeObject tree2;
-    tree2.Construct(box2);
-    
-    // Create instances
-    InstanceObject inst1(tree2);
-    glm::mat4x4 mtx=glm::rotate(glm::mat4x4(),0.5f,glm::vec3(1,0,0));
-    mtx[3][1]=1.0f;
-    inst1.SetMatrix(mtx);
-    scn.AddObject(inst1);
-    
-    InstanceObject inst2(tree2);
-    mtx=glm::rotate(glm::mat4x4(),1.0f,glm::vec3(0,1,0));
-    mtx[3]=glm::vec4(-1,0,1,1);
-    inst2.SetMatrix(mtx);
-    scn.AddObject(inst2);
+    ProceduralObject testing;
+    testing.Generate(5.0f,0.1f,5.0f);
+    scn.AddObject(testing);
     
     // Create lights
     DirectLight sunlgt;
@@ -372,12 +353,28 @@ void test(){
     
     // Create camera
     Camera cam;
-    cam.LookAt(glm::vec3(2.0f,2.0f,5.0f),glm::vec3(0.0f,0.0f,0.0f),glm::vec3(0,1,0));
+    cam.LookAt(glm::vec3(0.0f, 5.0f, 10.0f), glm::vec3(0.0f,0.0f, 0.0f), glm::vec3(0,1,0));
     cam.SetResolution(800,600);
     cam.SetFOV(40.0f);
     cam.SetAspect(1.33f);
     
+    //Time
+    struct timespec start, finish;
+    double elapsed;
+    
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    printf("Start Render\n");
+    
     // Render image
     cam.Render(scn);
-    cam.SaveBitmap("PA2/test.bmp");
+    
+    clock_gettime(CLOCK_MONOTONIC, &finish);
+    printf("Finish Render\n");
+    
+    elapsed = (finish.tv_sec - start.tv_sec);
+    elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
+    printf("elapsed: %f\n", elapsed);
+    
+    //Save
+    cam.SaveBitmap("PA5/test.bmp");
 }
