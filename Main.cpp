@@ -353,7 +353,7 @@ void test(){
     
     // Create camera
     Camera cam;
-    cam.LookAt(glm::vec3(0.0f, 5.0f, 10.0f), glm::vec3(0.0f,0.0f, 0.0f), glm::vec3(0,1,0));
+    cam.LookAt(glm::vec3(1.0f, 5.0f, 7.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0,1,0));
     cam.SetResolution(800,600);
     cam.SetFOV(40.0f);
     cam.SetAspect(1.33f);
