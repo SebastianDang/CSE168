@@ -36,8 +36,6 @@ ProceduralObject::~ProceduralObject() {
     delete []Materials;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
 bool ProceduralObject::Intersect(const Ray &ray, Intersection &hit) {
     bool success=false;
     for(int i=0;i<NumTriangles;i++)
@@ -45,8 +43,7 @@ bool ProceduralObject::Intersect(const Ray &ray, Intersection &hit) {
     return success;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
+/* Perform a procedural model. */
 void ProceduralObject::Generate(float x, float y, float z, Material *mtl){
     
     //Allocate arrays
@@ -173,7 +170,7 @@ void ProceduralObject::diamond_square(int x1, int x2, int y1, int y2, int level,
     diamond_square(x1, x2, y1, y2, level / 2, range / 2);
 }
 
-/* Updates the normals for the entire terrain. */
+/* Updates the normals for the entire object. */
 void ProceduralObject::updateNormals()
 {
     for (int i = 0; i < VERTEX_COUNT; i++)
@@ -203,6 +200,7 @@ float ProceduralObject::getHeightFromVertex(int x, int y)
     return Vertexes[(y*VERTEX_COUNT) + x].Position.y;
 }
 
+/* Return triangles. */
 Triangle** ProceduralObject::getTriangles(){
     Triangle** tris = new Triangle*[NumTriangles];
     for (int i = 0; i < NumTriangles; i++) {

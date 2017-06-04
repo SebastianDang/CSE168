@@ -329,44 +329,42 @@ void project4(){
 
 void test(){
     
-    // Create scene
+    //Create scene
     Scene scn;
     scn.SetSkyColor(Color(0.8f, 0.9f, 1.0f));
     
-    
-    // Roughened copper
+    // Material of the Procedural Object.
     AshikhminMaterial mtl_1;
     mtl_1.SetDiffuseLevel(0.0f);
     mtl_1.SetSpecularLevel(1.0f);
-    mtl_1.SetSpecular(Color(0.95f,0.7f,0.3f));
-    mtl_1.SetRoughness(1.0f,1000.0f);
+    mtl_1.SetSpecular(Color(0.9f,0.6f,0.5f));
+    mtl_1.SetRoughness(1.0f,100000.0f);
     
-    // Create boxes
-    ProceduralObject test;
-    test.Generate(5.0f,0.1f,5.0f);
+    //Create Object.
+    ProceduralObject proc;
+    proc.Generate(5.0f,0.1f,5.0f);
     
-    BoxTreeObject testing;
-    testing.Construct(test);
+    BoxTreeObject proc_tree;
+    proc_tree.Construct(proc);
     
-    InstanceObject inst1(testing);
+    InstanceObject inst1(proc_tree);
     inst1.SetMaterial(mtl_1);
-    
     scn.AddObject(inst1);
     
-    // Create lights
+    //Create light
     DirectLight sunlgt;
-    sunlgt.SetBaseColor(Color(1.0f, 1.0f, 0.9f));
+    sunlgt.SetBaseColor(Color(0.5f, 1.0f, 0.9f));
     sunlgt.SetIntensity(1.0f);
     sunlgt.SetDirection(glm::vec3 (2.0f, -3.0f, -2.0f));
     scn.AddLight(sunlgt);
     
-    // Create camera
+    //Create camera
     Camera cam;
     cam.SetResolution(800,600);
     cam.SetFOV(40.0f);
     cam.SetAspect(1.33f);
-    cam.LookAt(glm::vec3(2.0f, 4.0f, 9.0f), glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0,1,0));
-    cam.SetSuperSample(5,5);
+    cam.LookAt(glm::vec3(3.0f, 4.0f, 9.0f), glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0,1,0));
+    cam.SetSuperSample(2,2);
     cam.SetJitter(true);
     cam.SetShirley(true);
     
