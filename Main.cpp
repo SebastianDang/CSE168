@@ -335,9 +335,10 @@ void test(){
     
     // Material of the Procedural Object.
     AshikhminMaterial mtl_1;
-    mtl_1.SetDiffuseLevel(0.0f);
-    mtl_1.SetSpecularLevel(1.0f);
-    mtl_1.SetSpecular(Color(0.9f,0.6f,0.5f));
+    mtl_1.SetDiffuseLevel(0.2f);
+    mtl_1.SetSpecularLevel(0.8f);
+    mtl_1.SetDiffuse(Color(0.5f, 0.5f, 0.5f));
+    mtl_1.SetSpecular(Color(0.95f,0.7f,0.3f));
     mtl_1.SetRoughness(1.0f,100000.0f);
     
     //Create Object.
@@ -351,6 +352,30 @@ void test(){
     inst1.SetMaterial(mtl_1);
     scn.AddObject(inst1);
     
+    InstanceObject inst2(proc_tree);
+    glm::mat4 toWorld2 = glm::mat4(1.0f);
+    float angle = 90.0f * (M_PI/180.f);
+    toWorld2 = glm::translate(glm::mat4(1.0f), glm::vec3(4.0f, 0.0f, 0.0f)) * glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0,0,1)) * toWorld2;
+    inst2.SetMatrix(toWorld2);
+    inst2.SetMaterial(mtl_1);
+    scn.AddObject(inst2);
+    
+    InstanceObject inst3(proc_tree);
+    glm::mat4 toWorld3 = glm::mat4(1.0f);
+    float angle3 = 90.0f * (M_PI/180.f);
+    toWorld3 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 4.0f, 0.0f)) * glm::rotate(glm::mat4(1.0f), angle3, glm::vec3(0,0,-1)) * toWorld3;
+    inst3.SetMatrix(toWorld3);
+    inst3.SetMaterial(mtl_1);
+    scn.AddObject(inst3);
+    
+    InstanceObject inst4(proc_tree);
+    glm::mat4 toWorld4 = glm::mat4(1.0f);
+    float angle4 = 90.0f * (M_PI/180.f);
+    toWorld4 = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 4.0f, 0.0f)) * glm::rotate(glm::mat4(1.0f), angle4, glm::vec3(1,0,0)) * toWorld4;
+    inst4.SetMatrix(toWorld4);
+    inst4.SetMaterial(mtl_1);
+    scn.AddObject(inst4);
+    
     //Create light
     DirectLight sunlgt;
     sunlgt.SetBaseColor(Color(0.5f, 1.0f, 0.9f));
@@ -358,13 +383,20 @@ void test(){
     sunlgt.SetDirection(glm::vec3 (2.0f, -3.0f, -2.0f));
     scn.AddLight(sunlgt);
     
+    //Point light
+    PointLight redlgt;
+    redlgt.SetBaseColor(Color(1.0f, 1.0f, 1.0f));
+    redlgt.SetIntensity(4.0f);
+    redlgt.SetPosition(glm::vec3(2.0f, 2.0f, 1.0f));
+    scn.AddLight(redlgt);
+    
     //Create camera
     Camera cam;
     cam.SetResolution(800,600);
     cam.SetFOV(40.0f);
     cam.SetAspect(1.33f);
-    cam.LookAt(glm::vec3(3.0f, 4.0f, 9.0f), glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0,1,0));
-    cam.SetSuperSample(2,2);
+    cam.LookAt(glm::vec3(2.0f, 5.0f, 10.0f), glm::vec3(2.0f, 1.0f, 0.0f), glm::vec3(0,1,0));
+    cam.SetSuperSample(10,10);
     cam.SetJitter(true);
     cam.SetShirley(true);
     
