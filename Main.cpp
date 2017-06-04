@@ -250,7 +250,7 @@ void project4(){
     // Create box tree
     BoxTreeObject tree;
     tree.Construct(dragon);
-
+    
     // Materials
     const int nummtls=4;
     AshikhminMaterial mtl[nummtls];
@@ -333,30 +333,42 @@ void test(){
     Scene scn;
     scn.SetSkyColor(Color(0.8f, 0.9f, 1.0f));
     
+    
+    // Roughened copper
+    AshikhminMaterial mtl_1;
+    mtl_1.SetDiffuseLevel(0.0f);
+    mtl_1.SetSpecularLevel(1.0f);
+    mtl_1.SetSpecular(Color(0.95f,0.7f,0.3f));
+    mtl_1.SetRoughness(1.0f,1000.0f);
+    
     // Create boxes
-    ProceduralObject testing;
-    testing.Generate(5.0f,0.1f,5.0f);
-    scn.AddObject(testing);
+    ProceduralObject test;
+    test.Generate(5.0f,0.1f,5.0f);
+    
+    BoxTreeObject testing;
+    testing.Construct(test);
+    
+    InstanceObject inst1(testing);
+    inst1.SetMaterial(mtl_1);
+    
+    scn.AddObject(inst1);
     
     // Create lights
     DirectLight sunlgt;
     sunlgt.SetBaseColor(Color(1.0f, 1.0f, 0.9f));
-    sunlgt.SetIntensity(0.5f);
-    sunlgt.SetDirection(glm::vec3(-0.5f, -1.0f, -0.5f));
+    sunlgt.SetIntensity(1.0f);
+    sunlgt.SetDirection(glm::vec3 (2.0f, -3.0f, -2.0f));
     scn.AddLight(sunlgt);
-    
-    PointLight redlgt;
-    redlgt.SetBaseColor(Color(1.0f, 0.2f, 0.2f));
-    redlgt.SetIntensity(2.0f);
-    redlgt.SetPosition(glm::vec3(2.0f, 2.0f, 0.0f));
-    scn.AddLight(redlgt);
     
     // Create camera
     Camera cam;
-    cam.LookAt(glm::vec3(1.0f, 5.0f, 7.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0,1,0));
     cam.SetResolution(800,600);
     cam.SetFOV(40.0f);
     cam.SetAspect(1.33f);
+    cam.LookAt(glm::vec3(2.0f, 4.0f, 9.0f), glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0,1,0));
+    cam.SetSuperSample(5,5);
+    cam.SetJitter(true);
+    cam.SetShirley(true);
     
     //Time
     struct timespec start, finish;

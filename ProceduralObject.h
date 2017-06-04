@@ -14,7 +14,7 @@
 #include "Object.h"
 #include "Triangle.h"
 
-class ProceduralObject:public Object {
+class ProceduralObject : public Object {
 public:
     ProceduralObject();
     ~ProceduralObject();
@@ -23,7 +23,9 @@ public:
     
     void Generate(float x,float y,float z,Material *mtl=0);
 
+    Triangle **getTriangles();
     
+    int getNumTriangles(){ return NumTriangles; }
 
 private:
     int NumVertexes,NumTriangles,NumMaterials;
@@ -32,6 +34,8 @@ private:
     Material *Materials;
     
     void diamond_square(int x1, int x2, int y1, int y2, int level, float range);
+    void updateNormals();
+    float getHeightFromVertex(int x, int y);
     
 };
 

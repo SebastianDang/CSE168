@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "BoxTreeNode.h"
 #include "MeshObject.h"
+#include "ProceduralObject.h"
 
 class BoxTreeObject: public Object {
 
@@ -20,6 +21,8 @@ public:
     ~BoxTreeObject();
     
     void Construct(MeshObject &mesh);
+    void Construct(ProceduralObject &proc);
+    
     bool Intersect(const Ray &ray, Intersection &hit);
 
 private:

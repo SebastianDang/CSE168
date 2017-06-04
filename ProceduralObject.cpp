@@ -14,9 +14,9 @@
 #include "glm/glm.hpp"
 
 
-#define VERTEX_COUNT 32
-#define SIZE 2
-#define MAX_DISPLACEMENT 0.2f
+#define VERTEX_COUNT 256
+#define SIZE 4
+#define MAX_DISPLACEMENT 0.15f
 
 ProceduralObject::ProceduralObject() {
     NumVertexes=0;
@@ -81,9 +81,10 @@ void ProceduralObject::Generate(float x, float y, float z, Material *mtl){
     }
     
     //Perform smoothing.
-    float n_smooth = 2.0f;
-    float n_range = 1.0f;
+    float n_smooth = 10.0f;
+    float n_range = 16.0f;
     diamond_square(0, VERTEX_COUNT-1, 0, VERTEX_COUNT-1, (int)glm::pow(2, n_smooth), (float)n_range);
+    updateNormals();
 
     //Add it into Vertexes in proper order.
     int i = 0;
@@ -170,6 +171,44 @@ void ProceduralObject::diamond_square(int x1, int x2, int y1, int y2, int level,
     }
     //Begin Recursion.
     diamond_square(x1, x2, y1, y2, level / 2, range / 2);
+}
+
+/* Updates the normals for the entire terrain. */
+void ProceduralObject::updateNormals()
+{
+    for (int i = 0; i < VERTEX_COUNT; i++)
+    {
+        for (int j = 0; j < VERTEX_COUNT; j++)
+        {
+            //Get the proper heights.
+            float heightL = getHeightFromVertex(j - 1, i);
+            float heightR = getHeightFromVertex(j + 1, i);
+            float heightD = getHeightFromVertex(j, i + 1);
+            float heightU = getHeightFromVertex(j, i - 1);
+
+            //Update the normal.
+            glm::vec3 normal = glm::normalize(glm::vec3(heightL - heightR, 2.0f, heightU - heightD));
+            Vertexes[(i*VERTEX_COUNT) + j].Normal = normal;
+        }
+    }
+}
+
+/* Return the height at a given x, y coordinate. */
+float ProceduralObject::getHeightFromVertex(int x, int y)
+{
+    if (x < 0 || (x) >= VERTEX_COUNT || y < 0 || y >= VERTEX_COUNT)
+    {
+        return 0;
+    }
+    return Vertexes[(y*VERTEX_COUNT) + x].Position.y;
+}
+
+Triangle** ProceduralObject::getTriangles(){
+    Triangle** tris = new Triangle*[NumTriangles];
+    for (int i = 0; i < NumTriangles; i++) {
+        tris[i] = &Triangles[i];
+    }
+    return tris;
 }
 
 
