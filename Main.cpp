@@ -22,6 +22,7 @@ void project1();
 void project2();
 void project3();
 void project4();
+void project5();
 void test();
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -327,6 +328,81 @@ void project4(){
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void project5(){
+    
+    //Create scene
+    Scene scn;
+    scn.SetSkyColor(Color(0.8f, 0.9f, 1.0f));
+    
+    //Material of the Procedural Object.
+    AshikhminMaterial mtl;
+    mtl.SetDiffuseLevel(0.2f);
+    mtl.SetSpecularLevel(0.8f);
+    mtl.SetDiffuse(Color(0.5f, 0.5f, 0.5f));
+    mtl.SetSpecular(Color(0.95f,0.7f,0.3f));
+    mtl.SetRoughness(1.0f,100000.0f);
+    
+    //Generate the Object.
+    ProceduralObject proc;
+    proc.Generate(5.0f,0.1f,5.0f);
+    
+    //Create the Boxtree Object.
+    BoxTreeObject proc_tree;
+    proc_tree.Construct(proc);
+    
+    //Instance 1.
+    InstanceObject inst1(proc_tree);
+    inst1.SetMaterial(mtl);
+    scn.AddObject(inst1);
+    
+    //Create light
+    DirectLight sunlgt;
+    sunlgt.SetBaseColor(Color(0.5f, 1.0f, 0.9f));
+    sunlgt.SetIntensity(1.0f);
+    sunlgt.SetDirection(glm::vec3 (2.0f, -3.0f, -2.0f));
+    scn.AddLight(sunlgt);
+    
+    //Point light
+    PointLight pntlgt;
+    pntlgt.SetBaseColor(Color(1.0f, 1.0f, 1.0f));
+    pntlgt.SetIntensity(70.0f);
+    pntlgt.SetPosition(glm::vec3(2.0f, 2.0f, 2.0f));
+    scn.AddLight(pntlgt);
+    
+    //Create camera
+    Camera cam;
+    cam.SetResolution(800,600);
+    cam.SetFOV(40.0f);
+    cam.SetAspect(1.33f);
+    cam.LookAt(glm::vec3(2.0f, 5.0f, 10.0f), glm::vec3(2.0f, 1.0f, 0.0f), glm::vec3(0,1,0));
+    cam.SetSuperSample(2,2);
+    cam.SetJitter(true);
+    cam.SetShirley(true);
+    
+    //Time
+    struct timespec start, finish;
+    double elapsed;
+    
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    printf("Start Render\n");
+    
+    // Render image
+    cam.Render(scn);
+    
+    clock_gettime(CLOCK_MONOTONIC, &finish);
+    printf("Finish Render\n");
+    
+    elapsed = (finish.tv_sec - start.tv_sec);
+    elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
+    printf("elapsed: %f\n", elapsed);
+    
+    //Save
+    cam.SaveBitmap("PA5/project5.bmp");
+    
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void test(){
     
     //Create scene
@@ -386,8 +462,8 @@ void test(){
     //Point light
     PointLight redlgt;
     redlgt.SetBaseColor(Color(1.0f, 1.0f, 1.0f));
-    redlgt.SetIntensity(4.0f);
-    redlgt.SetPosition(glm::vec3(2.0f, 2.0f, 1.0f));
+    redlgt.SetIntensity(60.0f);
+    redlgt.SetPosition(glm::vec3(2.0f, 2.0f, 2.0f));
     scn.AddLight(redlgt);
     
     //Create camera
@@ -396,7 +472,7 @@ void test(){
     cam.SetFOV(40.0f);
     cam.SetAspect(1.33f);
     cam.LookAt(glm::vec3(2.0f, 5.0f, 10.0f), glm::vec3(2.0f, 1.0f, 0.0f), glm::vec3(0,1,0));
-    cam.SetSuperSample(10,10);
+    cam.SetSuperSample(2,2);
     cam.SetJitter(true);
     cam.SetShirley(true);
     

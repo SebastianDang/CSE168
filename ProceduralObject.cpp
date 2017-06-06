@@ -53,7 +53,7 @@ void ProceduralObject::Generate(float x, float y, float z, Material *mtl){
     Triangles = new Triangle[NumTriangles];
     if(mtl==0) mtl=new LambertMaterial;
     
-    //Create the height map: v, vn, texCoords
+    //Create the map: v, vn, texCoords
     for (int i = 0; i < VERTEX_COUNT; i++)
     {
         for (int j = 0; j < VERTEX_COUNT; j++)
@@ -78,8 +78,8 @@ void ProceduralObject::Generate(float x, float y, float z, Material *mtl){
     }
     
     //Perform smoothing.
-    float n_smooth = 10.0f;
-    float n_range = 16.0f;
+    float n_smooth = 10.0f;//10
+    float n_range = 16.0f;//16
     diamond_square(0, VERTEX_COUNT-1, 0, VERTEX_COUNT-1, (int)glm::pow(2, n_smooth), (float)n_range);
     updateNormals();
 
