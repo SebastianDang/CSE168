@@ -10,6 +10,9 @@
 #include "Material.h"
 #include "LambertMaterial.h"
 #include "MetalMaterial.h"
+#include <iostream>
+
+#define GRADIENT 0
 
 RayTrace::RayTrace(Scene &s){
     Scn = &s;
@@ -20,6 +23,28 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
     
     //If no surface is hit, we just use the sky color.
     if(Scn->Intersect(ray,hit)==false) {
+
+        //If we test for gradient.
+        if (GRADIENT){
+            //Get the 2 colors for skybox and bottom..
+            Color skybox = Scn->GetSkyColor();
+            Color grad = Scn->GetGradientColor();
+            
+            //Get the angle
+            glm::vec3 dir = ray.Direction;
+            
+            float scale_skybox = (dir.y + 1.0f)/2.0f;
+            float scale_gradient = 1.0-scale_skybox;
+            
+            skybox.Scale(skybox, scale_skybox);
+            grad.Scale(grad, scale_gradient);
+            
+            hit.Shade = skybox;
+            hit.Shade.Add(grad);
+            
+            return false;
+        }
+        
         hit.Shade=Scn->GetSkyColor();//Set to sky color.
         return false;
     }
