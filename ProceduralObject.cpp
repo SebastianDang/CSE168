@@ -15,7 +15,6 @@
 
 
 #define VERTEX_COUNT 256
-#define SIZE 4
 #define MAX_DISPLACEMENT 0.1f
 
 ProceduralObject::ProceduralObject() {
@@ -44,7 +43,7 @@ bool ProceduralObject::Intersect(const Ray &ray, Intersection &hit) {
 }
 
 /* Perform a procedural model. */
-void ProceduralObject::Generate(float x, float y, float z, Material *mtl){
+void ProceduralObject::Generate(float size, Material *mtl){
     
     //Allocate arrays
     NumVertexes = VERTEX_COUNT*VERTEX_COUNT;
@@ -59,9 +58,9 @@ void ProceduralObject::Generate(float x, float y, float z, Material *mtl){
         for (int j = 0; j < VERTEX_COUNT; j++)
         {
             //Setup the vertices.
-            float vertex_x = (float)j / ((float)VERTEX_COUNT - 1) * SIZE;
+            float vertex_x = (float)j / ((float)VERTEX_COUNT - 1) * size;
             float vertex_y = 0.0f;
-            float vertex_z = (float)i / ((float)VERTEX_COUNT - 1) * SIZE;
+            float vertex_z = (float)i / ((float)VERTEX_COUNT - 1) * size;
             //Setup the normals.
             float normal_x = 0;
             float normal_y = 1.0f;

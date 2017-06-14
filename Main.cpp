@@ -28,7 +28,7 @@ void test();
 ////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc,char **argv) {
-    test();
+    project5();
     return 0;
 }
 
@@ -330,32 +330,13 @@ void project4(){
 
 void project5(){
     
+    //----- Setup Lighting and the Environment -----//
+    
     //Create scene
     Scene scn;
     scn.SetSkyColor(Color(0.8f, 0.9f, 1.0f));
     
-    //Material of the Procedural Object.
-    AshikhminMaterial mtl;
-    mtl.SetDiffuseLevel(0.2f);
-    mtl.SetSpecularLevel(0.8f);
-    mtl.SetDiffuse(Color(0.5f, 0.5f, 0.5f));
-    mtl.SetSpecular(Color(0.95f,0.7f,0.3f));
-    mtl.SetRoughness(1.0f,100000.0f);
-    
-    //Generate the Object.
-    ProceduralObject proc;
-    proc.Generate(5.0f,0.1f,5.0f);
-    
-    //Create the Boxtree Object.
-    BoxTreeObject proc_tree;
-    proc_tree.Construct(proc);
-    
-    //Instance 1.
-    InstanceObject inst1(proc_tree);
-    inst1.SetMaterial(mtl);
-    scn.AddObject(inst1);
-    
-    //Create light
+    //Direct light
     DirectLight sunlgt;
     sunlgt.SetBaseColor(Color(0.5f, 1.0f, 0.9f));
     sunlgt.SetIntensity(1.0f);
@@ -369,16 +350,43 @@ void project5(){
     pntlgt.SetPosition(glm::vec3(2.0f, 2.0f, 2.0f));
     scn.AddLight(pntlgt);
     
-    //Create camera
+    //----- Setup Camera -----//
+    
     Camera cam;
-    cam.SetResolution(800,600);
     cam.SetFOV(40.0f);
     cam.SetAspect(1.33f);
+    cam.SetResolution(800,600);
     cam.LookAt(glm::vec3(2.0f, 5.0f, 10.0f), glm::vec3(2.0f, 1.0f, 0.0f), glm::vec3(0,1,0));
     cam.SetSuperSample(2,2);
     cam.SetJitter(true);
     cam.SetShirley(true);
     
+    //----- Procedural Object -----//
+    
+    //Material
+    AshikhminMaterial proc_mtl;
+    proc_mtl.SetDiffuseLevel(0.2f);
+    proc_mtl.SetSpecularLevel(0.8f);
+    proc_mtl.SetDiffuse(Color(0.5f, 0.5f, 0.5f));
+    proc_mtl.SetSpecular(Color(0.95f,0.7f,0.3f));
+    proc_mtl.SetRoughness(1.0f,100000.0f);
+    
+    //Generate the Object.
+    ProceduralObject proc;
+    proc.Generate(4.0f);
+    
+    //Create the Boxtree Object.
+    BoxTreeObject proc_tree;
+    proc_tree.Construct(proc);
+    
+    //Instance 1.
+    InstanceObject proc_inst1(proc_tree);
+    proc_inst1.SetMaterial(proc_mtl);
+    scn.AddObject(proc_inst1);
+    
+    
+    //----- Render -----//
+
     //Time
     struct timespec start, finish;
     double elapsed;
@@ -386,7 +394,7 @@ void project5(){
     clock_gettime(CLOCK_MONOTONIC, &start);
     printf("Start Render\n");
     
-    // Render image
+    //Render image
     cam.Render(scn);
     
     clock_gettime(CLOCK_MONOTONIC, &finish);
@@ -396,7 +404,7 @@ void project5(){
     elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
     printf("elapsed: %f\n", elapsed);
     
-    //Save
+    //Save to file.
     cam.SaveBitmap("PA5/project5.bmp");
     
 }
@@ -419,7 +427,7 @@ void test(){
     
     //Create Object.
     ProceduralObject proc;
-    proc.Generate(5.0f,0.1f,5.0f);
+    proc.Generate(4.0f);
     
     BoxTreeObject proc_tree;
     proc_tree.Construct(proc);

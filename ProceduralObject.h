@@ -21,7 +21,7 @@ public:
     
     bool Intersect(const Ray &ray,Intersection &hit);
     
-    void Generate(float x,float y,float z,Material *mtl=0);
+    void Generate(float size, Material *mtl=0);
 
     Triangle **getTriangles();
     
