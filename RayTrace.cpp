@@ -12,7 +12,7 @@
 #include "MetalMaterial.h"
 #include <iostream>
 
-#define GRADIENT 0
+#define GRADIENT 1
 
 RayTrace::RayTrace(Scene &s){
     Scn = &s;

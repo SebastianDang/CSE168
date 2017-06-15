@@ -347,8 +347,8 @@ void project5(){
     //Point light
     PointLight pntlgt;
     pntlgt.SetBaseColor(Color(1.0f, 0.0f, 0.0f));
-    pntlgt.SetIntensity(10.0f);
-    pntlgt.SetPosition(glm::vec3(6.0f, 4.0f, -4.0f));
+    pntlgt.SetIntensity(15.0f);
+    pntlgt.SetPosition(glm::vec3(12.0f, 6.5f, -15.0f));
     scn.AddLight(pntlgt);
 
     
@@ -359,6 +359,7 @@ void project5(){
     cam.SetAspect(1.33f);
     cam.SetResolution(800,600);
     cam.LookAt(glm::vec3(0.0f, 5.0f, 10.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0,1,0));
+    cam.LookAt(glm::vec3(-1.0f, 3.0f, 9.0f), glm::vec3(0.0f, 1.5f, 0.0f), glm::vec3(0,1,0));
     cam.SetSuperSample(2,2);
     cam.SetJitter(true);
     cam.SetShirley(true);
@@ -403,8 +404,8 @@ void project5(){
     
     InstanceObject sphere_inst1(sphere_tree);
     glm::mat4x4 mtx = glm::scale(glm::mat4x4(), glm::vec3(0.01f,0.01f,0.01f));
-    mtx = glm::scale(glm::mat4x4(), glm::vec3(7.0f, 7.0f, 7.0f)) * mtx;
-    mtx = glm::translate(glm::mat4x4(), glm::vec3(8.0f, 4.0f, -4.0f)) * mtx;
+    mtx = glm::scale(glm::mat4x4(), glm::vec3(8.0f, 8.0f, 8.0f)) * mtx;
+    mtx = glm::translate(glm::mat4x4(), glm::vec3(12.0f, 6.5f, -15.0f)) * mtx;
     sphere_inst1.SetMatrix(mtx);
     sphere_inst1.SetMaterial(sphere_mtl);
     scn.AddObject(sphere_inst1);

@@ -14,8 +14,8 @@
 #include "glm/glm.hpp"
 
 
-#define VERTEX_COUNT 256
-#define MAX_DISPLACEMENT 0.2f
+#define VERTEX_COUNT 300
+#define MAX_DISPLACEMENT 0.15f
 
 ProceduralObject::ProceduralObject() {
     NumVertexes=0;
