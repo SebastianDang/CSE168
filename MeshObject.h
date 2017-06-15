@@ -24,6 +24,8 @@ public:
     
     void AddDisplacement();
     
+    void AddNormalMap();
+    
     Triangle **getTriangles();
     
     int getNumTriangles(){ return NumTriangles; }

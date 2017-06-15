@@ -235,6 +235,7 @@ void project4(){
     // Create scene
     Scene scn;
     scn.SetSkyColor(Color(0.8f, 0.9f, 1.0f));
+    scn.SetGradientColor(Color(0.8f, 0.9f, 1.0f));
     
     // Create ground
     LambertMaterial groundMtl;
@@ -354,7 +355,7 @@ void project5(){
     //----- Setup Camera -----//
     
     Camera cam;
-    int quality = 2;
+    int quality = 10;
     cam.SetFOV(40.0f);
     cam.SetAspect(1.33f);
     cam.SetResolution(800,600);
@@ -394,7 +395,7 @@ void project5(){
     //Sphere Mesh
     MeshObject sphere;
     sphere.LoadPLY("Assets/sphere.ply");
-    sphere.AddDisplacement();
+    sphere.AddNormalMap();
     
     BoxTreeObject sphere_tree;
     sphere_tree.Construct(sphere);
@@ -407,11 +408,11 @@ void project5(){
     
     AshikhminMaterial sphere_mtl;
     
-    sphere_mtl.SetDiffuseLevel(0.3f);
-    sphere_mtl.SetSpecularLevel(0.7f);
-    sphere_mtl.SetDiffuse(Color(1.0f, 0.8f, 0.8f));
-    sphere_mtl.SetSpecular(Color(0.9f,0.6f,0.5f));
-    sphere_mtl.SetRoughness(100.0f,100.0f);
+    sphere_mtl.SetDiffuseLevel(0.2f);
+    sphere_mtl.SetSpecularLevel(0.8f);
+    sphere_mtl.SetDiffuse(Color(0.9f, 0.5f, 0.4f));
+    sphere_mtl.SetSpecular(Color(1.0f,0.2f,0.2f));
+    sphere_mtl.SetRoughness(100.0f,1000.0f);
     
 //    sphere_mtl.SetDiffuseLevel(0.2f);
 //    sphere_mtl.SetSpecularLevel(0.8f);
@@ -422,7 +423,7 @@ void project5(){
     InstanceObject sphere_inst1(sphere_tree);
     glm::mat4x4 mtx = glm::scale(glm::mat4x4(), glm::vec3(0.01f,0.01f,0.01f));
     mtx = glm::scale(glm::mat4x4(), glm::vec3(6.0f)) * mtx;
-    mtx = glm::translate(glm::mat4x4(), glm::vec3(12.0f, 7.0f, -10.0f)) * mtx;
+    mtx = glm::translate(glm::mat4x4(), glm::vec3(11.0f, 7.0f, -10.0f)) * mtx;
     sphere_inst1.SetMatrix(mtx);
     sphere_inst1.SetMaterial(sphere_mtl);
     scn.AddObject(sphere_inst1);

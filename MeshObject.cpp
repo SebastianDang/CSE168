@@ -8,6 +8,7 @@
 #include <string.h>
 #include "glm/glm.hpp"
 
+//Perlin Noise
 struct perlin {
     int p[512];
     perlin(void);
@@ -284,41 +285,51 @@ void MeshObject::Smooth() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
 void MeshObject::AddDisplacement() {
     
-    int i;
-    
-    for (i=0;i<NumVertexes;i++){
+    for (int i=0;i<NumVertexes;i++){
         
+        //Displace the point.
         Vertexes[i].Position += ((rand() % 100) / 100.0f) * Vertexes[i].Normal;
         
-        glm::vec3 ptHitPoint = Vertexes[i].Position;
-        
-        float noiseCoefx = float(noise(0.1 * double(ptHitPoint.x), 0.1 * double(ptHitPoint.y), 0.1 * double(ptHitPoint.z)));
-        
-        float noiseCoefy = float(noise(0.1 * double(ptHitPoint.y), 0.1 * double(ptHitPoint.z), 0.1 * double(ptHitPoint.x)));
-        
-        float noiseCoefz = float(noise(0.1 * double(ptHitPoint.z), 0.1 * double(ptHitPoint.x), 0.1 * double(ptHitPoint.y)));
-        
-        glm::vec3 vNormal = Vertexes[i].Normal;
-        
-        float bump = (rand()%100) / 100.0f;
-        
-        vNormal.x = (1.0f - bump) * vNormal.x + bump * noiseCoefx;
-        vNormal.y = (1.0f - bump) * vNormal.y + bump * noiseCoefy;
-        vNormal.z = (1.0f - bump) * vNormal.z + bump * noiseCoefz;
-        
-        float temp = glm::dot(vNormal, vNormal);
-        
-        if (temp == 0.0f)
-            break;
-        
-        temp = invsqrt(temp);
-        
-        Vertexes[i].Normal = temp * vNormal;
     }
     
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void MeshObject::AddNormalMap(){
+    
+    for (int i=0;i<NumVertexes;i++){
+        
+        //Get the new point.
+        glm::vec3 point = Vertexes[i].Position;
+        
+        //Generate noise from perlin noise.
+        float noise_x = float(noise(0.1*double(point.x), 0.1*double(point.y), 0.1*double(point.z)));
+        float noise_y = float(noise(0.1*double(point.y), 0.1* double(point.z), 0.1*double(point.x)));
+        float noise_z = float(noise(0.1*double(point.z), 0.1*double(point.x), 0.1*double(point.y)));
+        
+        //Get the normal.
+        glm::vec3 normal = Vertexes[i].Normal;
+        
+        //Generate a random procedure for bump map.
+        float bump = (rand()%100) / 100.0f;
+        
+        //Normal mapping.
+        normal.x = (1.0f - bump) * normal.x + bump * noise_x;
+        normal.y = (1.0f - bump) * normal.y + bump * noise_y;
+        normal.z = (1.0f - bump) * normal.z + bump * noise_z;
+        
+        //Transform the original normal.
+        float temp = glm::length(normal*normal);
+        if (temp == 0.0f)
+            break;
+        temp = invsqrt(temp);
+        
+        Vertexes[i].Normal = temp * normal;
+    }
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
