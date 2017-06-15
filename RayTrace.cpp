@@ -42,6 +42,14 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
             hit.Shade = skybox;
             hit.Shade.Add(grad);
             
+            Color purple = Color(0.29f,0.0f,0.51f);
+            hit.Shade.AddScaled(purple, 0.1f);
+            
+            float stars = (rand()%100)/100.0f;
+            if (stars > 0.98f){
+                hit.Shade = Color::WHITE;
+            }
+            
             return false;
         }
         

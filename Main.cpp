@@ -355,7 +355,7 @@ void project5(){
     //----- Setup Camera -----//
     
     Camera cam;
-    int quality = 10;
+    int quality = 2;
     cam.SetFOV(40.0f);
     cam.SetAspect(1.33f);
     cam.SetResolution(800,600);
@@ -412,7 +412,7 @@ void project5(){
     sphere_mtl.SetSpecularLevel(0.8f);
     sphere_mtl.SetDiffuse(Color(0.9f, 0.5f, 0.4f));
     sphere_mtl.SetSpecular(Color(1.0f,0.2f,0.2f));
-    sphere_mtl.SetRoughness(100.0f,1000.0f);
+    sphere_mtl.SetRoughness(100.0f,100.0f);
     
 //    sphere_mtl.SetDiffuseLevel(0.2f);
 //    sphere_mtl.SetSpecularLevel(0.8f);
