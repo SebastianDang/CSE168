@@ -14,7 +14,7 @@
 #include "glm/glm.hpp"
 
 
-#define VERTEX_COUNT 300
+#define VERTEX_COUNT 220
 #define MAX_DISPLACEMENT 0.15f
 
 ProceduralObject::ProceduralObject() {
@@ -77,7 +77,7 @@ void ProceduralObject::Generate(float size, Material *mtl){
     }
     
     //Perform smoothing.
-    float n_smooth = 10.0f;//10
+    float n_smooth = 9.0f;//10
     float n_range = 16.0f;//16
     diamond_square(0, VERTEX_COUNT-1, 0, VERTEX_COUNT-1, (int)glm::pow(2, n_smooth), (float)n_range);
     updateNormals();
@@ -181,7 +181,7 @@ void ProceduralObject::updateNormals()
             float heightR = getHeightFromVertex(j + 1, i);
             float heightD = getHeightFromVertex(j, i + 1);
             float heightU = getHeightFromVertex(j, i - 1);
-
+            
             //Update the normal.
             glm::vec3 normal = glm::normalize(glm::vec3(heightL - heightR, 2.0f, heightU - heightD));
             Vertexes[(i*VERTEX_COUNT) + j].Normal = normal;

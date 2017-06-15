@@ -334,33 +334,33 @@ void project5(){
     
     //Create scene
     Scene scn;
-    scn.SetSkyColor(Color(0.8f, 0.9f, 1.0f));
-    scn.SetGradientColor(Color(0.90f, 0.3f, 0.3f));
+    scn.SetSkyColor(Color(0.7f, 0.8f, 0.9f));
+    scn.SetGradientColor(Color(0.95f, 0.3f, 0.3f));
     
     //Direct light
     DirectLight sunlgt;
-    sunlgt.SetBaseColor(Color(0.5f, 1.0f, 0.9f));
+    sunlgt.SetBaseColor(Color(0.9f, 0.7f, 0.7f));
     sunlgt.SetIntensity(1.0f);
-    sunlgt.SetDirection(glm::vec3 (2.0f, -3.0f, -2.0f));
+    sunlgt.SetDirection(glm::vec3 (-2.0f, -3.0f, -1.0f));
     scn.AddLight(sunlgt);
     
     //Point light
     PointLight pntlgt;
     pntlgt.SetBaseColor(Color(1.0f, 0.0f, 0.0f));
     pntlgt.SetIntensity(15.0f);
-    pntlgt.SetPosition(glm::vec3(12.0f, 6.5f, -15.0f));
+    pntlgt.SetPosition(glm::vec3(12.0f, 6.5f, -10.0f));
     scn.AddLight(pntlgt);
-
     
     //----- Setup Camera -----//
     
     Camera cam;
+    int quality = 2;
     cam.SetFOV(40.0f);
     cam.SetAspect(1.33f);
     cam.SetResolution(800,600);
     cam.LookAt(glm::vec3(0.0f, 5.0f, 10.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0,1,0));
     cam.LookAt(glm::vec3(-1.0f, 3.0f, 9.0f), glm::vec3(0.0f, 1.5f, 0.0f), glm::vec3(0,1,0));
-    cam.SetSuperSample(2,2);
+    cam.SetSuperSample(quality, quality);
     cam.SetJitter(true);
     cam.SetShirley(true);
     
@@ -368,7 +368,7 @@ void project5(){
     
     //Generate the Object.
     ProceduralObject proc;
-    proc.Generate(10.0f);
+    proc.Generate(15.0f);
     
     //Create the Boxtree Object.
     BoxTreeObject proc_tree;
@@ -384,7 +384,7 @@ void project5(){
     
     //Instance 1.
     InstanceObject proc_inst1(proc_tree);
-    glm::mat4 proc_mtx = glm::translate(glm::mat4(), glm::vec3(-5.0f, 0.0f, -5.0f));
+    glm::mat4 proc_mtx = glm::translate(glm::mat4(), glm::vec3(-7.0f, 0.0f, -5.0f));
     proc_inst1.SetMatrix(proc_mtx);
     proc_inst1.SetMaterial(proc_mtl);
     scn.AddObject(proc_inst1);
@@ -399,13 +399,30 @@ void project5(){
     BoxTreeObject sphere_tree;
     sphere_tree.Construct(sphere);
     
-    LambertMaterial sphere_mtl;
-    sphere_mtl.SetDiffuse(Color(1.0f,0.3f,0.35f));
+//    LambertMaterial sphere_mtl;
+//    sphere_mtl.SetDiffuse(Color(1.0f,0.3f,0.35f));
+    
+//    MetalMaterial sphere_mtl;
+//    sphere_mtl.SetDiffuse(Color(1.0f,0.3f,0.35f));
+    
+    AshikhminMaterial sphere_mtl;
+    
+    sphere_mtl.SetDiffuseLevel(0.3f);
+    sphere_mtl.SetSpecularLevel(0.7f);
+    sphere_mtl.SetDiffuse(Color(1.0f, 0.8f, 0.8f));
+    sphere_mtl.SetSpecular(Color(0.9f,0.6f,0.5f));
+    sphere_mtl.SetRoughness(100.0f,100.0f);
+    
+//    sphere_mtl.SetDiffuseLevel(0.2f);
+//    sphere_mtl.SetSpecularLevel(0.8f);
+//    sphere_mtl.SetDiffuse(Color(1.0f,0.0f,0.0f));
+//    sphere_mtl.SetSpecular(Color(0.9f,0.6f,0.5f));
+//    sphere_mtl.SetRoughness(10.0f,10.0f);
     
     InstanceObject sphere_inst1(sphere_tree);
     glm::mat4x4 mtx = glm::scale(glm::mat4x4(), glm::vec3(0.01f,0.01f,0.01f));
-    mtx = glm::scale(glm::mat4x4(), glm::vec3(8.0f, 8.0f, 8.0f)) * mtx;
-    mtx = glm::translate(glm::mat4x4(), glm::vec3(12.0f, 6.5f, -15.0f)) * mtx;
+    mtx = glm::scale(glm::mat4x4(), glm::vec3(6.0f)) * mtx;
+    mtx = glm::translate(glm::mat4x4(), glm::vec3(12.0f, 7.0f, -10.0f)) * mtx;
     sphere_inst1.SetMatrix(mtx);
     sphere_inst1.SetMaterial(sphere_mtl);
     scn.AddObject(sphere_inst1);
