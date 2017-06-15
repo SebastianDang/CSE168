@@ -226,6 +226,19 @@ void MeshObject::Smooth() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+
+void MeshObject::AddDisplacement() {
+
+    int i;
+
+    for (i=0;i<NumVertexes;i++){
+        Vertexes[i].Position += ((rand() % 100) / 20.0f) * Vertexes[i].Normal;
+    }
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 Triangle** MeshObject::getTriangles(){
     Triangle** tris = new Triangle*[NumTriangles];
     for (int i = 0; i < NumTriangles; i++) {

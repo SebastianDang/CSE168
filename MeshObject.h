@@ -22,6 +22,8 @@ public:
     
     void Smooth();
     
+    void AddDisplacement();
+    
     Triangle **getTriangles();
     
     int getNumTriangles(){ return NumTriangles; }

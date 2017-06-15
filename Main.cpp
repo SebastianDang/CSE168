@@ -358,7 +358,7 @@ void project5(){
     cam.SetFOV(40.0f);
     cam.SetAspect(1.33f);
     cam.SetResolution(800,600);
-    cam.LookAt(glm::vec3(2.0f, 5.0f, 10.0f), glm::vec3(2.0f, 1.0f, 0.0f), glm::vec3(0,1,0));
+    cam.LookAt(glm::vec3(0.0f, 5.0f, 10.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0,1,0));
     cam.SetSuperSample(2,2);
     cam.SetJitter(true);
     cam.SetShirley(true);
@@ -367,7 +367,7 @@ void project5(){
     
     //Generate the Object.
     ProceduralObject proc;
-    proc.Generate(4.0f);
+    proc.Generate(10.0f);
     
     //Create the Boxtree Object.
     BoxTreeObject proc_tree;
@@ -381,9 +381,10 @@ void project5(){
     proc_mtl.SetSpecular(Color(0.9f,0.6f,0.5f));
     proc_mtl.SetRoughness(100.0f,100.0f);
     
-    
     //Instance 1.
     InstanceObject proc_inst1(proc_tree);
+    glm::mat4 proc_mtx = glm::translate(glm::mat4(), glm::vec3(-5.0f, 0.0f, -5.0f));
+    proc_inst1.SetMatrix(proc_mtx);
     proc_inst1.SetMaterial(proc_mtl);
     scn.AddObject(proc_inst1);
 
@@ -391,7 +392,8 @@ void project5(){
     
     //Sphere Mesh
     MeshObject sphere;
-    sphere.LoadPLY("Assets/ball.ply");
+    sphere.LoadPLY("Assets/sphere.ply");
+    sphere.AddDisplacement();
     
     BoxTreeObject sphere_tree;
     sphere_tree.Construct(sphere);
@@ -401,8 +403,8 @@ void project5(){
     
     InstanceObject sphere_inst1(sphere_tree);
     glm::mat4x4 mtx = glm::scale(glm::mat4x4(), glm::vec3(0.01f,0.01f,0.01f));
-    mtx = glm::scale(glm::mat4x4(), glm::vec3(5.0f, 5.0f, 5.0f)) * mtx;
-    mtx = glm::translate(glm::mat4x4(), glm::vec3(6.0f, 4.0f, -4.0f)) * mtx;
+    mtx = glm::scale(glm::mat4x4(), glm::vec3(7.0f, 7.0f, 7.0f)) * mtx;
+    mtx = glm::translate(glm::mat4x4(), glm::vec3(8.0f, 4.0f, -4.0f)) * mtx;
     sphere_inst1.SetMatrix(mtx);
     sphere_inst1.SetMaterial(sphere_mtl);
     scn.AddObject(sphere_inst1);
