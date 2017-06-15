@@ -33,7 +33,7 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
             //Get the angle
             glm::vec3 dir = ray.Direction;
             
-            float scale_skybox = (dir.y + 1.0f)/2.0f;
+            float scale_skybox = glm::sqrt((dir.y + 1.0f)/2.0f);
             float scale_gradient = 1.0-scale_skybox;
             
             skybox.Scale(skybox, scale_skybox);

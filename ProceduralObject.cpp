@@ -15,7 +15,7 @@
 
 
 #define VERTEX_COUNT 256
-#define MAX_DISPLACEMENT 0.1f
+#define MAX_DISPLACEMENT 0.2f
 
 ProceduralObject::ProceduralObject() {
     NumVertexes=0;

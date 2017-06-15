@@ -335,6 +335,7 @@ void project5(){
     //Create scene
     Scene scn;
     scn.SetSkyColor(Color(0.8f, 0.9f, 1.0f));
+    scn.SetGradientColor(Color(0.90f, 0.3f, 0.3f));
     
     //Direct light
     DirectLight sunlgt;
@@ -345,10 +346,11 @@ void project5(){
     
     //Point light
     PointLight pntlgt;
-    pntlgt.SetBaseColor(Color(1.0f, 1.0f, 1.0f));
-    pntlgt.SetIntensity(70.0f);
-    pntlgt.SetPosition(glm::vec3(2.0f, 2.0f, 2.0f));
+    pntlgt.SetBaseColor(Color(1.0f, 0.0f, 0.0f));
+    pntlgt.SetIntensity(10.0f);
+    pntlgt.SetPosition(glm::vec3(6.0f, 4.0f, -4.0f));
     scn.AddLight(pntlgt);
+
     
     //----- Setup Camera -----//
     
@@ -363,14 +365,6 @@ void project5(){
     
     //----- Procedural Object -----//
     
-    //Material
-    AshikhminMaterial proc_mtl;
-    proc_mtl.SetDiffuseLevel(0.2f);
-    proc_mtl.SetSpecularLevel(0.8f);
-    proc_mtl.SetDiffuse(Color(0.5f, 0.5f, 0.5f));
-    proc_mtl.SetSpecular(Color(0.95f,0.7f,0.3f));
-    proc_mtl.SetRoughness(1.0f,100000.0f);
-    
     //Generate the Object.
     ProceduralObject proc;
     proc.Generate(4.0f);
@@ -379,12 +373,41 @@ void project5(){
     BoxTreeObject proc_tree;
     proc_tree.Construct(proc);
     
+    //Create the Material.
+    AshikhminMaterial proc_mtl;
+    proc_mtl.SetDiffuseLevel(0.0f);
+    proc_mtl.SetSpecularLevel(1.0f);
+    proc_mtl.SetDiffuse(Color(0.9f, 0.6f, 0.5f));
+    proc_mtl.SetSpecular(Color(0.9f,0.6f,0.5f));
+    proc_mtl.SetRoughness(100.0f,100.0f);
+    
+    
     //Instance 1.
     InstanceObject proc_inst1(proc_tree);
     proc_inst1.SetMaterial(proc_mtl);
     scn.AddObject(proc_inst1);
+
+    //----- Other Objects -----//
     
+    //Sphere Mesh
+    MeshObject sphere;
+    sphere.LoadPLY("Assets/ball.ply");
     
+    BoxTreeObject sphere_tree;
+    sphere_tree.Construct(sphere);
+    
+    LambertMaterial sphere_mtl;
+    sphere_mtl.SetDiffuse(Color(1.0f,0.3f,0.35f));
+    
+    InstanceObject sphere_inst1(sphere_tree);
+    glm::mat4x4 mtx = glm::scale(glm::mat4x4(), glm::vec3(0.01f,0.01f,0.01f));
+    mtx = glm::scale(glm::mat4x4(), glm::vec3(5.0f, 5.0f, 5.0f)) * mtx;
+    mtx = glm::translate(glm::mat4x4(), glm::vec3(6.0f, 4.0f, -4.0f)) * mtx;
+    sphere_inst1.SetMatrix(mtx);
+    sphere_inst1.SetMaterial(sphere_mtl);
+    scn.AddObject(sphere_inst1);
+    
+
     //----- Render -----//
 
     //Time

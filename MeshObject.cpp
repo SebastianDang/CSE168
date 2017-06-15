@@ -25,7 +25,7 @@ MeshObject::MeshObject() {
 MeshObject::~MeshObject() {
 	delete []Vertexes;
 	delete []Triangles;
-    delete []&Materials;
+    delete []Materials;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
