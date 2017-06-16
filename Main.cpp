@@ -396,13 +396,14 @@ void project5(){
     MeshObject sphere;
     sphere.LoadPLY("Assets/sphere.ply");
     sphere.AddNormalMap();
+    sphere.AddDisplacement();
     
     BoxTreeObject sphere_tree;
     sphere_tree.Construct(sphere);
 
     AshikhminMaterial sphere_mtl;
-    sphere_mtl.SetDiffuseLevel(0.2f);
-    sphere_mtl.SetSpecularLevel(0.8f);
+    sphere_mtl.SetDiffuseLevel(1.0f);
+    sphere_mtl.SetSpecularLevel(0.0f);
     sphere_mtl.SetDiffuse(Color(0.9f, 0.5f, 0.4f));
     sphere_mtl.SetSpecular(Color(1.0f,0.2f,0.2f));
     sphere_mtl.SetRoughness(100.0f,100.0f);

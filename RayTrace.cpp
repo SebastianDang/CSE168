@@ -13,6 +13,7 @@
 #include <iostream>
 
 #define GRADIENT 1
+#define STAR_PROBABILITY 0.7f
 
 RayTrace::RayTrace(Scene &s){
     Scn = &s;
@@ -42,14 +43,14 @@ bool RayTrace::TraceRay(const Ray &ray, Intersection &hit, int depth){
             hit.Shade = skybox;
             hit.Shade.Add(grad);
             
-            //Add purple to everything.
+            //Add a blended color to everything.
             Color blend = Color(0.29f,0.0f,0.1f);
             float scale_blend = ((ray.Origin.x + 1.0f)/2.0f);
             hit.Shade.AddScaled(blend, scale_blend/1.0f);
             
             //Add white noise for 'stars'.
             float stars = (rand()%100)/100.0f;
-            if (stars > 0.95f){
+            if (stars > STAR_PROBABILITY){
                 hit.Shade = Color::WHITE;
             }
             
