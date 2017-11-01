@@ -2,6 +2,7 @@
 // MeshObject.cpp
 ////////////////////////////////////////
 
+#include "stdafx.h"
 #include "MeshObject.h"
 #include "LambertMaterial.h"
 #include <stdio.h>

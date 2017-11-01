@@ -2,6 +2,7 @@
 // Main.cpp
 ////////////////////////////////////////
 
+#include "stdafx.h"
 #include "LambertMaterial.h"
 #include "MetalMaterial.h"
 #include "AshikhminMaterial.h"
@@ -28,7 +29,7 @@ void test();
 ////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc,char **argv) {
-    project5();
+	test();
     return 0;
 }
 
@@ -82,7 +83,7 @@ void project1() {
     
     // Render image
     cam.Render(scn);
-    cam.SaveBitmap("PA1/project1.bmp");
+    cam.SaveBitmap("PA1/project1_windows.bmp");
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -208,6 +209,12 @@ void project3() {
     cam.SetJitter(true);
     cam.SetShirley(true);
     
+#ifdef _WIN32 
+	// Render image
+	cam.Render(scn);
+
+#else // Timer is only available in MacOS right now.
+	// Time
     struct timespec start, finish;
     double elapsed;
     
@@ -223,7 +230,8 @@ void project3() {
     elapsed = (finish.tv_sec - start.tv_sec);
     elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
     printf("elapsed: %f\n", elapsed);
-    
+#endif 
+
     //Save
     cam.SaveBitmap("PA3/project3.bmp");
 }
@@ -304,7 +312,12 @@ void project4(){
     cam.SetSuperSample(2,2);
     cam.SetJitter(true);
     cam.SetShirley(true);
-    
+
+#ifdef _WIN32 
+	// Render image
+	cam.Render(scn);
+
+#else // Timer is only available in MacOS right now.
     //Time
     struct timespec start, finish;
     double elapsed;
@@ -321,6 +334,7 @@ void project4(){
     elapsed = (finish.tv_sec - start.tv_sec);
     elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
     printf("elapsed: %f\n", elapsed);
+#endif
     
     //Save
     cam.SaveBitmap("PA4/project4.bmp");
@@ -419,6 +433,11 @@ void project5(){
 
     //----- Render -----//
 
+#ifdef _WIN32 
+	// Render image
+	cam.Render(scn);
+
+#else // Timer is only available in MacOS right now.
     //Time
     struct timespec start, finish;
     double elapsed;
@@ -435,7 +454,8 @@ void project5(){
     elapsed = (finish.tv_sec - start.tv_sec);
     elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
     printf("elapsed: %f\n", elapsed);
-    
+#endif
+
     //Save to file.
     cam.SaveBitmap("PA5/project5.bmp");
     
@@ -516,6 +536,11 @@ void test(){
     cam.SetJitter(true);
     cam.SetShirley(true);
     
+#ifdef _WIN32 
+	// Render image
+	cam.Render(scn);
+
+#else // Timer is only available in MacOS right now.
     //Time
     struct timespec start, finish;
     double elapsed;
@@ -532,7 +557,8 @@ void test(){
     elapsed = (finish.tv_sec - start.tv_sec);
     elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
     printf("elapsed: %f\n", elapsed);
-    
+#endif
+
     //Save
     cam.SaveBitmap("PA5/test.bmp");
 }

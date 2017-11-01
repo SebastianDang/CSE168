@@ -6,6 +6,7 @@
 //  Copyright © 2017 Sebastian Dang. All rights reserved.
 //
 
+#include "stdafx.h"
 #include "BoxTreeObject.h"
 #include <chrono>
 

@@ -6,6 +6,7 @@
 //  Copyright © 2017 Sebastian Dang. All rights reserved.
 //
 
+#include "stdafx.h"
 #include <future>
 #include <thread>
 #include "Camera.h"
@@ -194,5 +195,4 @@ void Camera::SetShirley(bool enable){
 //Save the Bitmap by writing it to a file.
 void Camera::SaveBitmap(char *filename){
     BMP.SaveBMP(filename);
-    
 }
