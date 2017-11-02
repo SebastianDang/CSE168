@@ -38,7 +38,7 @@ public:
         out = reflection;
         
         //Calculate the reflected color. (Fresnel Metal)
-        float nt = 0.617, kt = 2.63;
+        float nt = 0.617f, kt = 2.63f;
         float nd = glm::dot(hit.Normal, in);
 
         float rpar_num = ((powf(nt,2) + powf(kt,2)) * powf(nd, 2)) - (2 * nt * nd) + 1;

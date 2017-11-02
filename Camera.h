@@ -10,7 +10,7 @@
 #define Camera_h
 
 #include <stdio.h>
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 #include "Scene.h"
 #include "Bitmap.h"
 

@@ -25,7 +25,7 @@ public:
         float t = ((rand()%100) / 100.0f);
 
         //Cosine Weighted Hemisphere
-        float u = 2 * M_PI * s;
+        float u = 2.0f * M_PI * s;
         float v = sqrtf(1-t);
         
         glm::vec3 point;

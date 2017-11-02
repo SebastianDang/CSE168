@@ -7,7 +7,7 @@
 #include "LambertMaterial.h"
 #include <stdio.h>
 #include <string.h>
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 //Perlin Noise
 struct perlin {
@@ -326,7 +326,7 @@ void MeshObject::AddNormalMap(){
         float temp = glm::length(normal*normal);
         if (temp == 0.0f)
             break;
-        temp = invsqrt(temp);
+        temp = (float)invsqrt(temp);
         
         Vertexes[i].Normal = temp * normal;
     }

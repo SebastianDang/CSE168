@@ -65,9 +65,9 @@ void Camera::Render(Scene &s){
     std::size_t cores = std::thread::hardware_concurrency();
     std::vector<std::future<void>> future_vector;
     
-    for (std::size_t i(0); i < cores; ++i){
+    for (std::size_t core(0); core < cores; ++core){
         future_vector.emplace_back(std::async([=, &s](){
-            for (std::size_t index(i); index < max; index += cores){
+            for (std::size_t index(core); index < max; index += cores){
                 
                 //Recalculate x and y.
                 std::size_t x = index % XRes;
@@ -90,17 +90,17 @@ void Camera::Render(Scene &s){
                         if (Shirley){
                             //X
                             if (sub_x < 0.5){
-                                sub_x = -0.5 + sqrtf(2*sub_x);
+                                sub_x = -0.5f + sqrtf(2.0f*sub_x);
                             }
                             else if (sub_x >= 0.5){
-                                sub_x = 1.5 - sqrtf(2 - 2*sub_x);
+                                sub_x = 1.5f - sqrtf(2.0f - 2.0f*sub_x);
                             }
                             //Y
                             if (sub_y < 0.5){
-                                sub_y = -0.5 + sqrtf(2*sub_y);
+                                sub_y = -0.5f + sqrtf(2.0f*sub_y);
                             }
                             else if (sub_y >= 0.5){
-                                sub_y = 1.5 - sqrtf(2 - 2*sub_y);
+                                sub_y = 1.5f - sqrtf(2.0f - 2.0f*sub_y);
                             }
                         }
                         

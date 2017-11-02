@@ -9,7 +9,7 @@
 #ifndef BoxTreeNode_h
 #define BoxTreeNode_h
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 #include <stdio.h>
 #include "Object.h"
 #include "Triangle.h"

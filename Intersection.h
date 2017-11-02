@@ -5,7 +5,7 @@
 #pragma once
 
 #include "Color.h"
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 class Material;
 
 ////////////////////////////////////////////////////////////////////////////////

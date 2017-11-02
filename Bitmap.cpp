@@ -28,8 +28,8 @@ bool Bitmap::SaveBMP(const char *filename) {
 	head.StartAddress=sizeof(BitmapHeader)+2;
 
 	head.HeaderSize=12;
-	head.Width=XRes;
-	head.Height=YRes;
+	head.Width=(short)XRes;
+	head.Height=(short)YRes;
 	head.ColorPlanes=1;
 	head.BitsPerPixel=32;
 
