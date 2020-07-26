@@ -7,3 +7,5 @@ Includes concepts of ray tracing, camera models, geometry intersection, geometry
 
 The final project writeup can be found here:
 https://sebastiandang.github.io/cse168.html
+
+![Final Result](./PA5/Final.bmp)
